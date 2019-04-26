@@ -1,18 +1,16 @@
 package application.items;
 
 public abstract class Item {
-	protected int buyPrice;
-	protected int sellPrice;
+	protected int price;
 	protected String name;
 	
-	public Item(int buy, int sell, String n) {
-		buyPrice = buy;
-		sellPrice = sell;
+	public Item(int p, String n) {
+		price = p;
 		name = n;
 	}
 	
 	public int getBuyPrice() {
-		return buyPrice;
+		return price;
 	}
 	
 	public String getName() {
@@ -20,6 +18,6 @@ public abstract class Item {
 	}
 	
 	public int getSellPrice() {
-		return sellPrice;
+		return (int)(price * 0.5);
 	}
 }
