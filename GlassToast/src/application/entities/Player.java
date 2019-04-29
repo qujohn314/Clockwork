@@ -3,9 +3,13 @@ package application.entities;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.PriorityQueue;
 
 import application.Chest;
 import application.Game;
+import application.Interactable;
 import application.Sprite;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,11 +24,13 @@ public class Player extends Entity implements Serializable{
 	public int level;
 	public int health;
 	public int maxHealth;
-	public int speed;
+	public double speed;
 	public int silver;
 	public int xVel;
 	public int yVel;
 	private Game game;
+	private PriorityQueue<Interactable> interactRequests;
+	private boolean canInteract;
 	
 	public Player(int xcord,int ycord,Game g) {
 		super(xcord,ycord,g);
@@ -34,10 +40,12 @@ public class Player extends Entity implements Serializable{
 		x = 0;
 		y = 0;
 		silver = 0;
-		speed = 3;
+		speed = 2.5;
 		game = g;
 		width = 20;
 		height = 30;
+		interactRequests = new PriorityQueue<Interactable>();
+		canInteract = true;
 		
 		img.setScaleX(1);
 		img.setScaleY(1);
@@ -63,6 +71,13 @@ public class Player extends Entity implements Serializable{
 			if(event.getCode()  == KeyCode.D) {
 				game.getKeyInputs().add("D");
 			}
+			if(event.getCode()  == KeyCode.SPACE) {
+				if(canInteract) {
+					if(!interactRequests.isEmpty())
+						interactRequests.poll().interact();
+					canInteract = false;
+				}
+			}	
 		});
 		img.addEventFilter(javafx.scene.input.KeyEvent.KEY_RELEASED, event ->{
 			if(event.getCode()  == KeyCode.W) {
@@ -77,11 +92,22 @@ public class Player extends Entity implements Serializable{
 			if(event.getCode()  == KeyCode.D) {
 				game.getKeyInputs().remove("D");
 			}
+			if(event.getCode()  == KeyCode.SPACE) {
+				canInteract = true;
+			}	
 		});
-		
 		
 	}
 	
+	public void addInteractRequest(Interactable i) {
+		if(!interactRequests.contains(i))
+			interactRequests.add(i);
+	}
+	
+	public void removeInteractRequest(Interactable i) {
+		if(interactRequests.contains(i))
+			interactRequests.remove(i);
+	}
 	
 	public void moveY(double amt) {
 		y += amt*-1;
@@ -162,7 +188,6 @@ public class Player extends Entity implements Serializable{
 	@Override
 	public void onCollide(Sprite s) {
 		if(s instanceof Chest) {
-			System.out.println("Found Chest!");
 		}
 		
 	}

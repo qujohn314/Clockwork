@@ -24,7 +24,7 @@ public class Game extends StackPane{
 	private HashSet<String> keyInput;
 	public GraphicsContext graphics;
 	private Canvas canvas;
-	public StackPane hitBoxes,interactables;
+	public StackPane hitBoxes,interactables,textBoxes;
 	private boolean showHitBoxes;
 	public static double scaleX,scaleY;
 	private ArrayList<Sprite> sprites;
@@ -98,12 +98,16 @@ public class Game extends StackPane{
 		interactables.setPrefWidth(width);
 		interactables.setPrefHeight(height);
 		
+		textBoxes = new StackPane();
+		textBoxes.setPrefWidth(width);
+		textBoxes.setPrefHeight(height);
+		
 		this.getChildren().add(hitBoxes);
 		this.getChildren().add(interactables);
+		this.getChildren().add(textBoxes);
 
 		player = new Player(0,0,this);
 		 chest = new Chest(20,20,this);
-		
 		
 		
 	
