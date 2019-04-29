@@ -15,11 +15,14 @@ import javafx.scene.shape.Rectangle;
 public class Chest extends Sprite implements Interactable{
 
 	public ImageView openLabel;
+	private boolean opened;
+	
 	
 	public Chest(int xcord, int ycord,Game g) {
 		super(xcord, ycord,g);
 		width = 56;
 		height = 56;
+		opened = false;
 		try {
 			img.setImage(new Image(new FileInputStream("src/res/pics/Chest.png")));
 		} catch (FileNotFoundException e) {System.out.println("Error Loading Pic");}
@@ -79,21 +82,28 @@ public class Chest extends Sprite implements Interactable{
 	@Override
 	public void interact() {
 		
-		
+		opened = true;
 		System.out.println("Interacted!");
+		openLabel.setVisible(false);
+
 	}
 	
 	@Override
 	public boolean getCollision(Sprite s) {
+		if(opened)
+			return false;
 		if (s instanceof Player && !this.getHitBox().intersects(s.getHitBox())) {
 			openLabel.setVisible(false);
 			((Player)s).removeInteractRequest(this);
 		}
+
 		return this.getHitBox().intersects(s.getHitBox());
 	}
 
 	@Override
 	public void onCollide(Sprite s) {
+		if(opened)
+			return;
 		if(s instanceof Player) {
 			if(!openLabel.isVisible()) {
 				openLabel.setVisible(true);
