@@ -12,6 +12,7 @@ public abstract class Item {
 		desc = d;
 	}
 	
+	public abstract Item createNewItemObject();
 	
 	public String getDesc() {
 		return desc;

@@ -1,18 +1,15 @@
-package application.entities;
+package application.sprites.entities;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.PriorityQueue;
 
-import application.Chest;
 import application.Game;
 import application.Interactable;
-import application.Sprite;
+import application.sprites.Chest;
+import application.sprites.Sprite;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;

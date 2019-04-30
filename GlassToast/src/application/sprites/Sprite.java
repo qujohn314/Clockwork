@@ -1,5 +1,6 @@
-package application;
+package application.sprites;
 
+import application.Game;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.geometry.Rectangle2D;

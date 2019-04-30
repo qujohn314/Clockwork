@@ -2,8 +2,8 @@ package application.items.consumables;
 
 import java.util.function.Consumer;
 
-import application.entities.Player;
 import application.items.Item;
+import application.sprites.entities.Player;
 
 public class Consumable extends Item{
 	

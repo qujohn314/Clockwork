@@ -3,7 +3,9 @@ package application;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import application.entities.Player;
+import application.sprites.Chest;
+import application.sprites.Sprite;
+import application.sprites.entities.Player;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -108,7 +110,8 @@ public class Game extends StackPane{
 
 		player = new Player(0,0,this);
 		 chest = new Chest(20,20,this);
-		
+		Chest chest2 = new Chest(50,20,this);
+	
 		
 	
 		

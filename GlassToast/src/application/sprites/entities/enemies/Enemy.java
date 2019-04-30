@@ -1,10 +1,10 @@
-package application.entities.enemies;
+package application.sprites.entities.enemies;
 
 import java.util.ArrayList;
 
 import application.Game;
-import application.entities.Entity;
 import application.items.Item;
+import application.sprites.entities.Entity;
 
 public abstract class Enemy extends Entity{
 

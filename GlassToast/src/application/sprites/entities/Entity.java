@@ -1,7 +1,7 @@
-package application.entities;
+package application.sprites.entities;
 
 import application.Game;
-import application.Sprite;
+import application.sprites.Sprite;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 

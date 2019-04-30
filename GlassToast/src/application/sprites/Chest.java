@@ -1,9 +1,11 @@
-package application;
+package application.sprites;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import application.entities.Player;
+import application.Game;
+import application.Interactable;
+import application.sprites.entities.Player;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -12,10 +14,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class Chest extends Sprite implements Interactable{
+public class Chest extends Sprite implements Interactable, Comparable<Interactable>{
 
 	public ImageView openLabel;
 	private boolean opened;
+	
 	
 	
 	public Chest(int xcord, int ycord,Game g) {
@@ -68,9 +71,7 @@ public class Chest extends Sprite implements Interactable{
 		img.setTranslateX(x * Game.scaleX);
 		img.setTranslateY(y * Game.scaleY);
 		
-		
-		
-		openLabel.setTranslateX((x+1) * Game.scaleX);
+		openLabel.setTranslateX((x) * Game.scaleX);
 		openLabel.setTranslateY((y-20) * Game.scaleY);
 		
 	}
@@ -111,6 +112,20 @@ public class Chest extends Sprite implements Interactable{
 			}
 		}
 		
+	}
+
+	@Override
+	public int compareTo(Interactable i) {
+		if(this.getPriorityValue() < i.getPriorityValue())
+			return -1;
+		else if(this.getPriorityValue() == i.getPriorityValue())
+			return 0;
+		return 1;
+	}
+
+	@Override
+	public int getPriorityValue() {
+		return 3;
 	}
 
 }
