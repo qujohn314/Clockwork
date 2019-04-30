@@ -29,4 +29,8 @@ public abstract class Item {
 	public int getSellPrice() {
 		return (int)(price * 0.5);
 	}
+	
+	public String toString() {
+		return name;
+	}
 }

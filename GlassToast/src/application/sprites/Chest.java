@@ -2,15 +2,18 @@ package application.sprites;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
 import application.Game;
 import application.Interactable;
+import application.LootTable;
+import application.LootTable.LootElement;
+import application.items.Gear;
+import application.items.consumables.Sealant;
 import application.sprites.entities.Player;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -18,7 +21,7 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 
 	public ImageView openLabel;
 	private boolean opened;
-	
+	private LootTable lootTable;
 	
 	
 	public Chest(int xcord, int ycord,Game g) {
@@ -39,8 +42,8 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 			openLabel.setImage(new Image(new FileInputStream("src/res/pics/openLabel.png")));
 		} catch (FileNotFoundException e) {System.out.println("Error Loading Player");}
 		game.textBoxes.getChildren().add(openLabel);
-		
-
+	
+		lootTable = new LootTable(new LootElement(10,new Sealant(),1),new LootElement(50,new Gear(Gear.Type.BRONZE),2));
 		
 	}
 
@@ -84,8 +87,8 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 	public void interact() {
 		
 		opened = true;
-		System.out.println("Interacted!");
 		openLabel.setVisible(false);
+		System.out.println(Arrays.toString(lootTable.lootItems().toArray()));
 
 	}
 	
