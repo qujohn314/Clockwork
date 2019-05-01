@@ -28,6 +28,7 @@ public class Gear extends Item{
 			val = v;
 			name = n;
 			desc = d;
+			
 		}
 	}
 	
