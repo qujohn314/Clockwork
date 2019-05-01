@@ -7,14 +7,18 @@ import application.sprites.Chest;
 import application.sprites.Sprite;
 import application.sprites.entities.Player;
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.Node;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
 public class Game extends StackPane{
 	
@@ -30,6 +34,7 @@ public class Game extends StackPane{
 	private boolean showHitBoxes;
 	public static double scaleX,scaleY;
 	private ArrayList<Sprite> sprites;
+	public double time;
 	Chest chest;
 	
 	public void render() {	
@@ -139,15 +144,22 @@ public class Game extends StackPane{
 			});
 	
 		
-		renderer = new AnimationTimer() {
-			@Override
-			public void handle(long now) {
-				render();
-			}
+			 Timeline gameLoop = new Timeline();
+		        gameLoop.setCycleCount( Timeline.INDEFINITE );
+		      
+		        KeyFrame kf = new KeyFrame(
+		            Duration.seconds(0.0167),                // 60 FPS
+		            new EventHandler<ActionEvent>()
+		            {
+		                public void handle(ActionEvent ae)
+		                { 
+		                	render();
+		                }
+		            });
+		        
+		        gameLoop.getKeyFrames().add( kf );
+		        gameLoop.play();
 			
-		};
-		
-		renderer.start();
 		
 	}
 }
