@@ -109,8 +109,9 @@ public class Game extends StackPane{
 		this.getChildren().add(textBoxes);
 
 		player = new Player(0,0,this);
-		 chest = new Chest(20,20,this);
+		 chest = new Chest(-30,20,this);
 		Chest chest2 = new Chest(50,20,this);
+		Chest chest3 = new Chest(130,20,this);
 	
 		
 	
