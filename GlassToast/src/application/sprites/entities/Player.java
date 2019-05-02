@@ -38,7 +38,7 @@ public class Player extends Entity implements Serializable{
 		x = 0;
 		y = 0;
 		silver = 0;
-		speed = 3.2;
+		speed = 2.3;
 		game = g;
 		width = 20;
 		height = 30;
@@ -60,8 +60,8 @@ public class Player extends Entity implements Serializable{
 		} catch (FileNotFoundException e) {System.out.println("Error Loading Player");}
 		img.setFocusTraversable(true);
 		img.requestFocus();
-		generateFrameViewports(1);
-		
+		generateFrameViewports(2);
+		autoAnimate(0.25);
 		img.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->{
 			if(event.getCode()  == KeyCode.W) {
 				game.getKeyInputs().add("W");
@@ -131,6 +131,15 @@ public class Player extends Entity implements Serializable{
 	
 	public double getY() {
 		return y;
+	}
+	
+	@Override
+	public void rescale() {
+		img.setScaleX(Game.scaleX*1.2);
+		img.setScaleY(Game.scaleY*1.2);
+		
+		hitBox.setWidth(width*Game.scaleX*1.2);
+		hitBox.setHeight(height * Game.scaleY*1.2);
 	}
 	
 	@Override
