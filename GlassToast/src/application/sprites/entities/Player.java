@@ -9,6 +9,7 @@ import application.Game;
 import application.Interactable;
 import application.sprites.Chest;
 import application.sprites.Sprite;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -43,18 +44,24 @@ public class Player extends Entity implements Serializable{
 		height = 30;
 		interactRequests = new PriorityQueue<Interactable>();
 		canInteract = true;
-		
+	
 		img.setScaleX(1);
 		img.setScaleY(1);
+		
+		
 		setHitBox();
 		
 		game.addSprite(this);
 		
 		try {
+		
 			img.setImage(new Image(new FileInputStream("src/res/pics/Player.png")));
+			
 		} catch (FileNotFoundException e) {System.out.println("Error Loading Player");}
 		img.setFocusTraversable(true);
 		img.requestFocus();
+		generateFrameViewports(1);
+		
 		img.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->{
 			if(event.getCode()  == KeyCode.W) {
 				game.getKeyInputs().add("W");
@@ -143,32 +150,46 @@ public class Player extends Entity implements Serializable{
 		
 		if(game.getKeyInputs().size() == 2) {
 			if(game.getKeyInputs().contains("W") && game.getKeyInputs().contains("A")) {
+				
 				moveY(newSpeedY / Math.sqrt(2));
 				moveX(-newSpeedX/ Math.sqrt(2));
+				
 			}
 			else if(game.getKeyInputs().contains("W") && game.getKeyInputs().contains("D")) {
+				
 				moveY(newSpeedY / Math.sqrt(2));
 				moveX(newSpeedX/ Math.sqrt(2));
 			}
 			else if(game.getKeyInputs().contains("S") && game.getKeyInputs().contains("A")) {
+				
 				moveY(-newSpeedY / Math.sqrt(2));
 				moveX(-newSpeedX/ Math.sqrt(2));
 			}
 			else if(game.getKeyInputs().contains("S") && game.getKeyInputs().contains("D")) {
+				
 				moveY(-newSpeedY / Math.sqrt(2));
 				moveX(newSpeedX/ Math.sqrt(2));
 			}
 		}
 			else {
-				if(game.getKeyInputs().contains("W"))
+				if(game.getKeyInputs().contains("W")) {
+				
 					moveY(newSpeedY);
-				if(game.getKeyInputs().contains("S")) 
+				}
+				if(game.getKeyInputs().contains("S")) {
+				
 					moveY(-newSpeedY);
-				if(game.getKeyInputs().contains("A")) 
+				}
+				if(game.getKeyInputs().contains("A")) {
+				
 					moveX(-newSpeedX);
-				if(game.getKeyInputs().contains("D")) 
+				}
+				if(game.getKeyInputs().contains("D")) { 
+					
 					moveX(newSpeedX);
+				}
 			}
+		
 		
 		img.setTranslateX(x * Game.scaleX);
 		img.setTranslateY(y * Game.scaleY);

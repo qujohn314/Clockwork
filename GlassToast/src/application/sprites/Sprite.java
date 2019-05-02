@@ -1,11 +1,20 @@
 package application.sprites;
 
+
+
 import application.Game;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public abstract class Sprite {
 	protected double x;
@@ -14,10 +23,18 @@ public abstract class Sprite {
 	protected Rectangle hitBox;
 	protected double width,height;
 	protected Game game;
-	
+	protected Rectangle2D[] animationCycle;
+	protected Rectangle2D[][] animationSet;
+	protected int currentAnimationCycle;
+	protected int currentImgFrame;
+	protected Timeline autoAnimation;
 	
 	
 	public Sprite(int xcord, int ycord, Game g) {
+		animationCycle = new Rectangle2D[0];
+		animationSet = new Rectangle2D[][] {animationCycle};
+		currentImgFrame = 0;
+		currentAnimationCycle = 0;
 		x = xcord;
 		y = -ycord;
 		game = g;
@@ -35,6 +52,62 @@ public abstract class Sprite {
 	
 	public ImageView getImg() {
 		return img;
+	}
+	
+	/**
+	 * NOTE: All spritesheet imgs are to be spaced 4 pixels away from surrounding imgs
+	 * 
+	 * @param s - Each s[n] value is the number of frames for an animationCycle. Each 's' is a new separate animation cycle
+	 */
+	protected void generateFrameViewports(int...s) {
+		int imgX = 0;
+		int imgY = 0;
+		
+		Rectangle2D[][] holder = new Rectangle2D[s.length][0];
+		for(int r = 0;r<s.length;r++) {
+			holder[r] = new Rectangle2D[s[r]];
+			for(int i = 0;i<holder[r].length;i++) {
+				holder[r][i] = new Rectangle2D(imgX,imgY,32,32);
+				imgX += 36;
+			}
+			imgY += 36;
+		}
+		animationSet = holder;
+		animationCycle = animationSet[0];
+		img.setViewport(animationCycle[0]);
+	}
+	
+	protected void setAnimationFrame(int i) {
+		if(i > animationCycle.length-1)
+			return;
+		img.setViewport(animationCycle[i]);
+	}
+	
+	protected void setAnimationCycle(int i) {
+		if(i > animationSet.length-1)
+			return;
+		currentAnimationCycle = i;
+		animationCycle = animationSet[i];
+	}
+	
+	protected void autoAnimate(double animateDelaySECONDS) {
+		autoAnimation = new Timeline();
+		autoAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(animateDelaySECONDS), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				img.setViewport(animationCycle[currentImgFrame]);
+				currentImgFrame++;
+				if(currentImgFrame >= animationCycle.length)
+					currentImgFrame = 0;
+			}
+			
+		}));
+		autoAnimation.setCycleCount(Timeline.INDEFINITE);
+		autoAnimation.play();
+	}
+	
+	public void stopAutoAnimate() {
+		autoAnimation.stop();
 	}
 	
 	protected abstract void setHitBox();
