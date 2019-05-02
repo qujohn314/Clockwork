@@ -37,7 +37,7 @@ public class Player extends Entity implements Serializable{
 		x = 0;
 		y = 0;
 		silver = 0;
-		speed = 2.5;
+		speed = 3.2;
 		game = g;
 		width = 20;
 		height = 30;
@@ -94,6 +94,10 @@ public class Player extends Entity implements Serializable{
 			}	
 		});
 		
+	}
+	
+	public int frameRate() {
+		return 0;
 	}
 	
 	public void addInteractRequest(Interactable i) {

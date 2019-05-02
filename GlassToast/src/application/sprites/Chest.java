@@ -61,8 +61,8 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 		img.setScaleX(Game.scaleX*.6);
 		img.setScaleY(Game.scaleY*.6);
 		
-		hitBox.setWidth(width*Game.scaleX*0.55);
-		hitBox.setHeight(height * Game.scaleY*0.55);
+		hitBox.setWidth(width*Game.scaleX*.55);
+		hitBox.setHeight(height * Game.scaleY*.55);
 		
 		
 		openLabel.setScaleX(Game.scaleX*0.15);

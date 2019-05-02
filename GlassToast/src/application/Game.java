@@ -21,12 +21,10 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 public class Game extends StackPane{
-	
+	private Player player;
 	private Scene scene;
 	private double width;
 	private double height;
-	private Player player;
-	private AnimationTimer renderer;
 	private HashSet<String> keyInput;
 	public GraphicsContext graphics;
 	private Canvas canvas;
@@ -34,13 +32,14 @@ public class Game extends StackPane{
 	private boolean showHitBoxes;
 	public static double scaleX,scaleY;
 	private ArrayList<Sprite> sprites;
-	public double time;
 	Chest chest;
+	AnimationTimer renderer;
+	private static final float timeStep = 0.0125f;
+	private float accumulatedTime = 0,previousTime = 0;
 	
 	public void render() {	
 		for(Sprite s:sprites) {
-			s.render();	
-			s.renderHitBox(showHitBoxes);
+			
 			for(int i = 0;i<sprites.size();i++) {
 				if(sprites.get(i).equals(s))
 					continue;
@@ -117,7 +116,7 @@ public class Game extends StackPane{
 		 chest = new Chest(-30,20,this);
 		Chest chest2 = new Chest(50,20,this);
 		Chest chest3 = new Chest(130,20,this);
-	
+		
 		
 	
 		
@@ -144,22 +143,34 @@ public class Game extends StackPane{
 			});
 	
 		
-			 Timeline gameLoop = new Timeline();
-		        gameLoop.setCycleCount( Timeline.INDEFINITE );
-		      
-		        KeyFrame kf = new KeyFrame(
-		            Duration.seconds(0.0167),                // 60 FPS
-		            new EventHandler<ActionEvent>()
-		            {
-		                public void handle(ActionEvent ae)
-		                { 
-		                	render();
-		                }
-		            });
-		        
-		        gameLoop.getKeyFrames().add( kf );
-		        gameLoop.play();
+			renderer = new AnimationTimer() {
+				@Override
+				public void handle(long currentTime) {
+					if(previousTime == 0) {
+						previousTime = currentTime;
+						return;
+					}
+					float secondsElapsed = (currentTime - previousTime) / 1e9f;
+					float secondsElapsedCapped = Math.min(secondsElapsed, 0.0167f);
+					accumulatedTime += secondsElapsedCapped;
+					previousTime = currentTime;
+					
+					while(accumulatedTime >= timeStep) {
+						render();
+						accumulatedTime -= timeStep;
+					}
+					
+					for(Sprite s:sprites) {
+						s.render();	
+						s.renderHitBox(showHitBoxes);
+					}
+					
+					
+				}
+			};
 			
+			renderer.start();
+		
 		
 	}
 }
