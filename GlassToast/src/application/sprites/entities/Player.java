@@ -60,7 +60,7 @@ public class Player extends Entity implements Serializable{
 		} catch (FileNotFoundException e) {System.out.println("Error Loading Player");}
 		img.setFocusTraversable(true);
 		img.requestFocus();
-		generateFrameViewports(2);
+		generateFrameViewports(32,2);
 		autoAnimate(0.25);
 		img.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->{
 			if(event.getCode()  == KeyCode.W) {
@@ -135,6 +135,10 @@ public class Player extends Entity implements Serializable{
 	
 	@Override
 	public void rescale() {
+		double imgSize = img.getImage().getWidth() * Game.scaleX * 1.2;
+		
+		generateFrameViewports(32,2);
+		
 		img.setScaleX(Game.scaleX*1.2);
 		img.setScaleY(Game.scaleY*1.2);
 		

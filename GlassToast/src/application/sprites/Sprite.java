@@ -13,6 +13,9 @@ import javafx.event.EventType;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -29,7 +32,6 @@ public abstract class Sprite {
 	protected int currentImgFrame;
 	protected Timeline autoAnimation;
 	
-	
 	public Sprite(int xcord, int ycord, Game g) {
 		animationCycle = new Rectangle2D[0];
 		animationSet = new Rectangle2D[][] {animationCycle};
@@ -40,6 +42,7 @@ public abstract class Sprite {
 		game = g;
 		img = new ImageView();
 		img.setPreserveRatio(true);
+		
 	}	
 	
 	public void rescale() {
@@ -58,8 +61,14 @@ public abstract class Sprite {
 	 * NOTE: All spritesheet imgs are to be spaced 4 pixels away from surrounding imgs
 	 * 
 	 * @param s - Each s[n] value is the number of frames for an animationCycle. Each 's' is a new separate animation cycle
+	 * @param dim -Dimension of imgBox
 	 */
-	protected void generateFrameViewports(int...s) {
+	protected void generateFrameViewports(int dim,int...s) {
+		final double scaleX = dim / 32;
+		final double scaleY = dim / 32;
+		
+		int Hgap = (int)(4 * scaleX);
+		int Vgap = (int)(4 * scaleY);
 		int imgX = 0;
 		int imgY = 0;
 		
@@ -67,10 +76,10 @@ public abstract class Sprite {
 		for(int r = 0;r<s.length;r++) {
 			holder[r] = new Rectangle2D[s[r]];
 			for(int i = 0;i<holder[r].length;i++) {
-				holder[r][i] = new Rectangle2D(imgX,imgY,32,32);
-				imgX += 36;
+				holder[r][i] = new Rectangle2D(imgX,imgY,dim,dim);
+				imgX += dim + Hgap;
 			}
-			imgY += 36;
+			imgY += dim + Vgap;
 		}
 		animationSet = holder;
 		animationCycle = animationSet[0];
@@ -134,6 +143,8 @@ public abstract class Sprite {
 			hitBox.setVisible(false);
 	}
 	
+	
+
 	
 	public abstract void render();
 	
