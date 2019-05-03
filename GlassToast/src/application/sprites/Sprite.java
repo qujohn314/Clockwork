@@ -29,8 +29,10 @@ public abstract class Sprite {
 	protected Rectangle2D[] animationCycle;
 	protected Rectangle2D[][] animationSet;
 	protected int currentAnimationCycle;
-	protected int currentImgFrame;
+	protected int currentImgFrame,spriteBoxDim,spriteBoxScale;
 	protected Timeline autoAnimation;
+	protected Image spriteSheet;
+	protected double spriteSheetSize;
 	
 	public Sprite(int xcord, int ycord, Game g) {
 		animationCycle = new Rectangle2D[0];
@@ -63,23 +65,20 @@ public abstract class Sprite {
 	 * @param s - Each s[n] value is the number of frames for an animationCycle. Each 's' is a new separate animation cycle
 	 * @param dim -Dimension of imgBox
 	 */
-	protected void generateFrameViewports(int dim,int...s) {
-		final double scaleX = dim / 32;
-		final double scaleY = dim / 32;
+	protected void generateFrameViewports(int dim,int scale,int...s) {
 		
-		int Hgap = (int)(4 * scaleX);
-		int Vgap = (int)(4 * scaleY);
 		int imgX = 0;
 		int imgY = 0;
+		dim = (int)(dim*scale);
 		
 		Rectangle2D[][] holder = new Rectangle2D[s.length][0];
 		for(int r = 0;r<s.length;r++) {
 			holder[r] = new Rectangle2D[s[r]];
 			for(int i = 0;i<holder[r].length;i++) {
 				holder[r][i] = new Rectangle2D(imgX,imgY,dim,dim);
-				imgX += dim + Hgap;
+				imgX += dim + 4*scale;
 			}
-			imgY += dim + Vgap;
+			imgY += dim ;
 		}
 		animationSet = holder;
 		animationCycle = animationSet[0];

@@ -57,8 +57,12 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 	
 	@Override
 	public void rescale() {
-		img.setScaleX(Game.scaleX*.6);
-		img.setScaleY(Game.scaleY*.6);
+		try {
+			img.setImage(new Image(new FileInputStream("src/res/pics/Chest.png"),32*Game.scaleX*0.6,Game.scaleY*32*0.6,true,false));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		hitBox.setWidth(width*Game.scaleX*.55);
 		hitBox.setHeight(height * Game.scaleY*.55);
@@ -76,6 +80,8 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 		openLabel.setTranslateX((x) * Game.scaleX);
 		openLabel.setTranslateY((y-20) * Game.scaleY);
 		
+	
+		
 	}
 	@Override
 	public Rectangle2D getHitBox() {
@@ -89,7 +95,7 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 		openLabel.setVisible(false);
 		System.out.println(Arrays.toString(lootTable.lootItems().toArray()));
 		try {
-			img.setImage(new Image(new FileInputStream("src/res/pics/ChestOpen.png"),32,32,true,false));
+			img.setImage(new Image(new FileInputStream("src/res/pics/ChestOpen.png"),32*Game.scaleX*0.6,Game.scaleY*32*0.6,true,false));
 		} catch (FileNotFoundException e) {System.out.println("Error Loading Pic");}
 	}
 	

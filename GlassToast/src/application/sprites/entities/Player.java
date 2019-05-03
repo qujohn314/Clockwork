@@ -44,24 +44,25 @@ public class Player extends Entity implements Serializable{
 		height = 30;
 		interactRequests = new PriorityQueue<Interactable>();
 		canInteract = true;
-	
-		img.setScaleX(1);
-		img.setScaleY(1);
-		
+		spriteBoxDim = 32;
+		img.setPreserveRatio(true);
+		spriteBoxScale = 2;
 		
 		setHitBox();
 		
 		game.addSprite(this);
 		
 		try {
-		
-			img.setImage(new Image(new FileInputStream("src/res/pics/Player.png")));
-			
+			spriteSheet = new Image(new FileInputStream("src/res/pics/Player.png"));
+			spriteSheetSize = spriteSheet.getWidth()*spriteBoxScale;
+			img.setImage(spriteSheet);
 		} catch (FileNotFoundException e) {System.out.println("Error Loading Player");}
 		img.setFocusTraversable(true);
 		img.requestFocus();
-		generateFrameViewports(32,2);
+		
+		generateFrameViewports(spriteBoxDim,spriteBoxScale,2);
 		autoAnimate(0.25);
+		
 		img.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->{
 			if(event.getCode()  == KeyCode.W) {
 				game.getKeyInputs().add("W");
@@ -135,14 +136,21 @@ public class Player extends Entity implements Serializable{
 	
 	@Override
 	public void rescale() {
-		double imgSize = img.getImage().getWidth() * Game.scaleX * 1.2;
 		
-		generateFrameViewports(32,2);
+		try {
+			img.setImage(new Image(new FileInputStream("src/res/pics/Player.png"),spriteSheetSize,spriteSheetSize,true,false));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		img.setScaleX(Game.scaleX*1.2);
-		img.setScaleY(Game.scaleY*1.2);
+		generateFrameViewports(spriteBoxDim,spriteBoxScale,2);
 		
-		hitBox.setWidth(width*Game.scaleX*1.2);
+		
+		img.setScaleX(Game.scaleX*0.6);
+		img.setScaleY(Game.scaleY*0.6);
+		
+		hitBox.setWidth(width*Game.scaleX);
 		hitBox.setHeight(height * Game.scaleY*1.2);
 	}
 	
