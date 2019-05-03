@@ -9,7 +9,6 @@ import application.Game;
 import application.Interactable;
 import application.sprites.Chest;
 import application.sprites.Sprite;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -61,7 +60,7 @@ public class Player extends Entity implements Serializable{
 		img.requestFocus();
 		
 		generateFrameViewports(spriteBoxDim,spriteBoxScale,2);
-		autoAnimate(0.25);
+		autoAnimate(0.2);
 		
 		img.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->{
 			if(event.getCode()  == KeyCode.W) {
