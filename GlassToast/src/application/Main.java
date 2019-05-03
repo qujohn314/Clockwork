@@ -19,7 +19,7 @@ public class Main extends Application {
 			primaryStage.show();
 			primaryStage.setTitle("Clockwork");
 			primaryStage.getIcons().add(new Image(new FileInputStream("src/res/pics/icon.png")));
-			//primaryStage.setFullScreenExitHint("");
+			//primaryStage.setFullScreenExitHint("Nice");
 			//primaryStage.setFullScreen(true);
 		
 			game.init(scene);

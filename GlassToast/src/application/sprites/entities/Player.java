@@ -146,8 +146,8 @@ public class Player extends Entity implements Serializable{
 		generateFrameViewports(spriteBoxDim,spriteBoxScale,2);
 		
 		
-		img.setScaleX(Game.scaleX*0.6);
-		img.setScaleY(Game.scaleY*0.6);
+		img.setScaleX(Game.scaleX*0.85);
+		img.setScaleY(Game.scaleY*0.85);
 		
 		hitBox.setWidth(width*Game.scaleX);
 		hitBox.setHeight(height * Game.scaleY*1.2);
