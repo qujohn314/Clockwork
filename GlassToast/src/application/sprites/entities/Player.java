@@ -3,12 +3,15 @@ package application.sprites.entities;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 import application.Game;
 import application.Interactable;
+import application.items.Item;
 import application.sprites.Chest;
 import application.sprites.Sprite;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -27,6 +30,8 @@ public class Player extends Entity implements Serializable{
 	public int yVel;
 	private Game game;
 	private PriorityQueue<Interactable> interactRequests;
+	private ArrayList<Item> inventory;
+	
 	private boolean canInteract;
 	
 	public Player(int xcord,int ycord,Game g) {
@@ -125,13 +130,7 @@ public class Player extends Entity implements Serializable{
 		x += amt;
 	}
 	
-	public double getX() {
-		return x;
-	}
 	
-	public double getY() {
-		return y;
-	}
 	
 	@Override
 	public void rescale() {
@@ -149,8 +148,8 @@ public class Player extends Entity implements Serializable{
 		img.setScaleX(Game.scaleX*0.85);
 		img.setScaleY(Game.scaleY*0.85);
 		
-		hitBox.setWidth(width*Game.scaleX);
-		hitBox.setHeight(height * Game.scaleY*1.2);
+		hitBox.setWidth(width*Game.scaleX*1.6);
+		hitBox.setHeight(height * Game.scaleY*1.5);
 	}
 	
 	@Override
@@ -224,6 +223,10 @@ public class Player extends Entity implements Serializable{
 		hitBox = new Rectangle(x,y,width,height);
 		hitBox.setFill(Color.RED);
 
+	}
+	
+	public Rectangle2D getHitBox() {
+		return new Rectangle2D(x* Game.scaleX,y * Game.scaleY,width*Game.scaleX * 1.6,height * Game.scaleY * 1.5);
 	}
 
 

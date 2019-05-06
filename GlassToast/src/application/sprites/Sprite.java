@@ -28,7 +28,7 @@ public abstract class Sprite {
 	protected Image spriteSheet;
 	protected double spriteSheetSize;
 	
-	public Sprite(int xcord, int ycord, Game g) {
+	public Sprite(double xcord,double ycord, Game g) {
 		animationCycle = new Rectangle2D[0];
 		animationSet = new Rectangle2D[][] {animationCycle};
 		currentImgFrame = 0;
@@ -136,7 +136,13 @@ public abstract class Sprite {
 			hitBox.setVisible(false);
 	}
 	
+	public double getX() {
+		return x;
+	}
 	
+	public double getY() {
+		return y;
+	}
 
 	
 	public abstract void render();

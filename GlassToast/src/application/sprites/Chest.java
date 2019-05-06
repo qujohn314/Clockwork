@@ -64,8 +64,8 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 			e.printStackTrace();
 		}
 		
-		hitBox.setWidth(width*Game.scaleX*.55);
-		hitBox.setHeight(height * Game.scaleY*.55);
+		hitBox.setWidth(width*Game.scaleX*.75);
+		hitBox.setHeight(height * Game.scaleY*.75);
 		
 		
 		openLabel.setScaleX(Game.scaleX*0.15);
@@ -85,7 +85,7 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 	}
 	@Override
 	public Rectangle2D getHitBox() {
-		return new Rectangle2D((x-5)* Game.scaleX,y * Game.scaleY,width*Game.scaleX * 0.55,height * Game.scaleY * 0.55);
+		return new Rectangle2D((x-5)* Game.scaleX,y * Game.scaleY,width*Game.scaleX * 0.75,height * Game.scaleY * 0.75);
 	}
 
 	@Override

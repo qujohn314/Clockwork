@@ -21,7 +21,7 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 public class Game extends StackPane{
-	private Player player;
+	public Player player;
 	private Scene scene;
 	private double width;
 	private double height;
