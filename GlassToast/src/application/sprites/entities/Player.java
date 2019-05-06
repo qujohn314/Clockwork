@@ -42,7 +42,7 @@ public class Player extends Entity implements Serializable{
 		x = 0;
 		y = 0;
 		silver = 0;
-		speed = 2.3;
+		speed = 2.5;
 		game = g;
 		width = 20;
 		height = 30;
