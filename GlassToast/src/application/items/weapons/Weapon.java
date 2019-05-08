@@ -14,7 +14,7 @@ public class Weapon extends Item{
 	public Weapon(Entity e,int p, String n, String d,double dmg,String pic) {
 		super(p, n, d);
 		entity = e;
-		weaponSprite = new WeaponSprite(e.getX(),e.getY(),g);
+		weaponSprite = new WeaponSprite(e.getX(),e.getY(),Game.getGame());
 	}
 
 	
@@ -22,7 +22,7 @@ public class Weapon extends Item{
 	
 	public static class Melee{
 		public static Weapon GhostIron(Entity e) {
-			return new Weapon(g,70,"Ghost Iron Blade","A short sword made from a rare metal.",3.5,"GhostSteelSword.png");
+			return new Weapon(e,70,"Ghost Iron Blade","A short sword made from a rare metal.",3.5,"GhostSteelSword.png");
 		}
 		
 		

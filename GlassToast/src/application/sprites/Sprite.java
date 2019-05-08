@@ -70,7 +70,7 @@ public abstract class Sprite {
 			holder[r] = new Rectangle2D[s[r]];
 			for(int i = 0;i<holder[r].length;i++) {
 				holder[r][i] = new Rectangle2D(imgX,imgY,dim,dim);
-				imgX += dim + 4*scale;
+				imgX += dim;
 			}
 			imgY += dim ;
 		}

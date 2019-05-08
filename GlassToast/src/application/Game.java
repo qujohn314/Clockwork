@@ -21,6 +21,7 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 public class Game extends StackPane{
+	private static Game game;
 	public Player player;
 	private Scene scene;
 	private double width;
@@ -36,6 +37,7 @@ public class Game extends StackPane{
 	AnimationTimer renderer;
 	private static final float timeStep = 0.0125f;
 	private float accumulatedTime = 0,previousTime = 0;
+	private static boolean newGameMade = false;
 	
 	public void render() {	
 		for(Sprite s:sprites) {
@@ -47,6 +49,17 @@ public class Game extends StackPane{
 					s.onCollide(sprites.get(i));
 				}
 			}
+		}
+	}
+	
+	public static Game getGame() {
+		return game;
+	}
+	
+	public static void newGame(){
+		if(!newGameMade) {
+			game = new Game();
+			newGameMade = true;
 		}
 	}
 

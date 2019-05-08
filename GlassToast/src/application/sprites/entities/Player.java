@@ -65,7 +65,7 @@ public class Player extends Entity implements Serializable{
 		img.requestFocus();
 		
 		generateFrameViewports(spriteBoxDim,spriteBoxScale,2);
-		autoAnimate(0.2);
+		autoAnimate(0.07);
 		
 		img.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->{
 			if(event.getCode()  == KeyCode.W) {

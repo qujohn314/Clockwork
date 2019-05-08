@@ -12,8 +12,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Game game = new Game();
-			Scene scene = new Scene(game,1200,675);
+			Game.newGame();
+			Scene scene = new Scene(Game.getGame(),1200,675);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -22,7 +22,7 @@ public class Main extends Application {
 			//primaryStage.setFullScreenExitHint("Nice");
 			//primaryStage.setFullScreen(true);
 		
-			game.init(scene);
+			Game.getGame().init(scene);
 			
 			primaryStage.setMaximized(true);
 		} catch(Exception e) {
