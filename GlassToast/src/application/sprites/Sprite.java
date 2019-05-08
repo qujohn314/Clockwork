@@ -2,6 +2,9 @@ package application.sprites;
 
 
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import application.Game;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -85,6 +88,13 @@ public abstract class Sprite {
 		img.setViewport(animationCycle[i]);
 	}
 	
+	protected void nextFrame() {
+		img.setViewport(animationCycle[currentImgFrame]);
+		currentImgFrame++;
+		if(currentImgFrame >= animationCycle.length)
+			currentImgFrame = 0;
+	}
+	
 	protected void setAnimationCycle(int i) {
 		if(i > animationSet.length-1)
 			return;
@@ -144,6 +154,13 @@ public abstract class Sprite {
 		return y;
 	}
 
+	protected void setBaseSpriteSheet(String n) {
+		try {
+			spriteSheet = new Image(new FileInputStream("src/res/pics/" + n));
+			spriteSheetSize = spriteSheet.getWidth()*spriteBoxScale;
+			img.setImage(spriteSheet);
+		} catch (FileNotFoundException e) {System.out.println("Error Loading Player");}
+	}
 	
 	public abstract void render();
 	

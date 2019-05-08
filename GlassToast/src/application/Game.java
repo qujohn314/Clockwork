@@ -3,6 +3,7 @@ package application;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import application.items.weapons.WeaponSprite;
 import application.sprites.Chest;
 import application.sprites.Sprite;
 import application.sprites.entities.Player;
@@ -29,8 +30,8 @@ public class Game extends StackPane{
 	private HashSet<String> keyInput;
 	public GraphicsContext graphics;
 	private Canvas canvas;
-	public StackPane hitBoxes,interactables,textBoxes;
-	private boolean showHitBoxes;
+	public StackPane hitBoxes,interactables,textBoxes,weaponBoxes,equippedWeapon,characters;
+	public boolean showHitBoxes;
 	public static double scaleX,scaleY;
 	private ArrayList<Sprite> sprites;
 	Chest chest;
@@ -78,12 +79,19 @@ public class Game extends StackPane{
 	
 	public void addSprite(Sprite s) {
 		sprites.add(s);
-		if(s instanceof Interactable)
+		if(s instanceof Interactable) {
 			interactables.getChildren().add(s.getImg());
-		else
-			this.getChildren().add(s.getImg());
+			hitBoxes.getChildren().add(s.getFakeHitBox());
+		}
 		
-		hitBoxes.getChildren().add(s.getFakeHitBox());
+		else if(s instanceof WeaponSprite) {
+			equippedWeapon.getChildren().add(s.getImg());
+			weaponBoxes.getChildren().add(s.getFakeHitBox());
+		}
+		else {
+			hitBoxes.getChildren().add(s.getFakeHitBox());
+			characters.getChildren().add(s.getImg());
+		}
 	}
 	
 	public void removeSprite(Sprite s) {
@@ -121,9 +129,25 @@ public class Game extends StackPane{
 		textBoxes.setPrefWidth(width);
 		textBoxes.setPrefHeight(height);
 		
+		characters = new StackPane();
+		characters.setPrefWidth(width);
+		characters.setPrefHeight(height);
+		
+		equippedWeapon = new StackPane();
+		equippedWeapon.setPrefWidth(width);
+		equippedWeapon.setPrefHeight(height);
+		
+		weaponBoxes = new StackPane();
+		weaponBoxes.setPrefWidth(width);
+		weaponBoxes.setPrefHeight(height);
+		
 		this.getChildren().add(hitBoxes);
+		this.getChildren().add(weaponBoxes);
 		this.getChildren().add(interactables);
 		this.getChildren().add(textBoxes);
+		this.getChildren().add(characters);
+		this.getChildren().add(equippedWeapon);
+		
 
 		player = new Player(0,0,this);
 		 chest = new Chest(-30,20,this);
@@ -174,8 +198,10 @@ public class Game extends StackPane{
 					}
 					
 					for(Sprite s:sprites) {
-						s.render();	
+						if(!(s instanceof WeaponSprite)) {
+							s.render();	
 						s.renderHitBox(showHitBoxes);
+						}
 					}
 					
 					

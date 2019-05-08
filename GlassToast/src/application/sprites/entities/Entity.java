@@ -6,10 +6,24 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public abstract class Entity extends Sprite{
-	public Entity(int xcord, int ycord,Game g) {
+	
+	protected double handX;
+	protected double handY;
+	
+	public Entity(int xcord, int ycord,double hX, double hY,Game g) {
 		super(xcord, ycord,g);
+		handX = hX;
+		handY = hY;
 	}
 
+	public double getHandX() {
+		return handX; 
+	}
+	
+	public double getHandY() {
+		return handY;
+	}
+	
 	@Override
 	protected void setHitBox() {
 		hitBox = new Rectangle(x,y,width,height);
@@ -17,7 +31,8 @@ public abstract class Entity extends Sprite{
 	}
 	
 	@Override
-	public void render() {
+	public void render() {	
+		
 		img.setTranslateX(x);
 		img.setTranslateY(y);
 	}

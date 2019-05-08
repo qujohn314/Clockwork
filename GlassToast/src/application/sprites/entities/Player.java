@@ -9,6 +9,7 @@ import java.util.PriorityQueue;
 import application.Game;
 import application.Interactable;
 import application.items.Item;
+import application.items.weapons.Weapon;
 import application.sprites.Chest;
 import application.sprites.Sprite;
 import javafx.geometry.Rectangle2D;
@@ -31,14 +32,17 @@ public class Player extends Entity implements Serializable{
 	private Game game;
 	private PriorityQueue<Interactable> interactRequests;
 	private ArrayList<Item> inventory;
+	private Weapon weapon;
+	private boolean canAttack;
 	
 	private boolean canInteract;
 	
 	public Player(int xcord,int ycord,Game g) {
-		super(xcord,ycord,g);
+		super(xcord,ycord,0,0,g);
 		level = 1;
 		health = 1;
 		maxHealth = 1;
+		canAttack = true;
 		x = 0;
 		y = 0;
 		silver = 0;
@@ -51,6 +55,8 @@ public class Player extends Entity implements Serializable{
 		spriteBoxDim = 32;
 		img.setPreserveRatio(true);
 		spriteBoxScale = 2;
+		
+		weapon = Weapon.Melee.ghostIron(this);
 		
 		setHitBox();
 		
@@ -86,6 +92,11 @@ public class Player extends Entity implements Serializable{
 						interactRequests.poll().interact();
 					canInteract = false;
 				}
+				if(canAttack) {
+					weapon.attack();
+					canAttack = false;
+					
+				}
 			}	
 		});
 		img.addEventFilter(javafx.scene.input.KeyEvent.KEY_RELEASED, event ->{
@@ -103,9 +114,16 @@ public class Player extends Entity implements Serializable{
 			}
 			if(event.getCode()  == KeyCode.SPACE) {
 				canInteract = true;
+				if(!weapon.weaponSprite.attacking)
+					canAttack = true;
 			}	
 		});
-		
+		img.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED, event ->{
+			
+		});
+		img.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_RELEASED, event ->{
+			
+		});
 	}
 	
 	public int frameRate() {
@@ -156,6 +174,7 @@ public class Player extends Entity implements Serializable{
 	public void render() {
 		double newSpeedY = speed;
 		double newSpeedX = speed;
+		
 		
 		
 		if(Game.scaleX > Game.scaleY) {
@@ -210,9 +229,13 @@ public class Player extends Entity implements Serializable{
 			}
 		
 		
+		handX = (x+width-12)*Game.scaleX;
+		handY = (y+height-35)*Game.scaleY;
+		
 		img.setTranslateX(x * Game.scaleX);
 		img.setTranslateY(y * Game.scaleY);
 		
+		weapon.weaponSprite.render();
 		
 	//	System.out.println("X:"+x + " Y:" + y);
 		
@@ -232,8 +255,6 @@ public class Player extends Entity implements Serializable{
 
 	@Override
 	public void onCollide(Sprite s) {
-		if(s instanceof Chest) {
-		}
 		
 	}
 
