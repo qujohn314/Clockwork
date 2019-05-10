@@ -29,7 +29,6 @@ public class Player extends Entity implements Serializable{
 	public int silver;
 	public int xVel;
 	public int yVel;
-	private Game game;
 	private PriorityQueue<Interactable> interactRequests;
 	private ArrayList<Item> inventory;
 	private Weapon weapon;
@@ -37,8 +36,8 @@ public class Player extends Entity implements Serializable{
 	
 	private boolean canInteract;
 	
-	public Player(int xcord,int ycord,Game g) {
-		super(xcord,ycord,0,0,g);
+	public Player(int xcord,int ycord) {
+		super(xcord,ycord,0,0);
 		level = 1;
 		health = 1;
 		maxHealth = 1;
@@ -47,30 +46,23 @@ public class Player extends Entity implements Serializable{
 		y = 0;
 		silver = 0;
 		speed = 2.5;
-		game = g;
-		width = 20;
-		height = 30;
+		width = 32;
+		height = 32;
 		interactRequests = new PriorityQueue<Interactable>();
 		canInteract = true;
-		spriteBoxDim = 32;
 		img.setPreserveRatio(true);
-		spriteBoxScale = 2;
+		scale = 4;
 		
 		weapon = Weapon.Melee.ghostIron(this);
-		
+
 		setHitBox();
 		
-		game.addSprite(this);
-		
-		try {
-			spriteSheet = new Image(new FileInputStream("src/res/pics/Player.png"));
-			spriteSheetSize = spriteSheet.getWidth()*spriteBoxScale;
-			img.setImage(spriteSheet);
-		} catch (FileNotFoundException e) {System.out.println("Error Loading Player");}
+		setBaseSpriteSheet("Player.png",scale);
+
 		img.setFocusTraversable(true);
 		img.requestFocus();
 		
-		generateFrameViewports(spriteBoxDim,spriteBoxScale,2);
+		generateFrameViewports(width*scale,2);
 		autoAnimate(0.07);
 		
 		img.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->{
@@ -124,6 +116,7 @@ public class Player extends Entity implements Serializable{
 		img.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_RELEASED, event ->{
 			
 		});
+		game.addSprite(this);
 	}
 	
 	public int frameRate() {
@@ -154,13 +147,13 @@ public class Player extends Entity implements Serializable{
 	public void rescale() {
 		
 		try {
-			img.setImage(new Image(new FileInputStream("src/res/pics/Player.png"),spriteSheetSize,spriteSheetSize,true,false));
+			img.setImage(new Image(new FileInputStream("src/res/pics/Player.png"),32,32,true,false));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		generateFrameViewports(spriteBoxDim,spriteBoxScale,2);
+		generateFrameViewports(32,2);
 		
 		
 		img.setScaleX(Game.scaleX*0.85);

@@ -14,6 +14,7 @@ import application.sprites.entities.Player;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -23,15 +24,16 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 	private boolean opened;
 	private LootTable lootTable;
 	
-	
-	public Chest(int xcord, int ycord,Game g) {
-		super(xcord, ycord,g);
-		width = 56;
-		height = 56;
+	public Chest(int xcord, int ycord) {
+		super(xcord, ycord);
+		width = 32;
+		height = 32;
 		opened = false;
+		
 		try {
-			img.setImage(new Image(new FileInputStream("src/res/pics/Chest.png"),32,32,true,false));
+			img.setImage(new Image(new FileInputStream("src/res/pics/Chest.png"),64,64,true,false));
 		} catch (FileNotFoundException e) {System.out.println("Error Loading Pic");}
+		
 		img.setScaleX(1);
 		img.setScaleY(1);
 		setHitBox();
@@ -44,6 +46,8 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 		game.textBoxes.getChildren().add(openLabel);
 	
 		lootTable = new LootTable(new LootElement(5,new Gear(Gear.Type.STEEL),1),new LootElement(15,new Sealant(),1),new LootElement(50,new Gear(Gear.Type.BRONZE),2));
+		
+	
 		
 	}
 

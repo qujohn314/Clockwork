@@ -8,8 +8,8 @@ import application.sprites.entities.Entity;
 
 public abstract class Enemy extends Entity{
 
-	public Enemy(int xcord, int ycord,Game g) {
-		super(xcord, ycord,0,0,g);
+	public Enemy(int xcord, int ycord) {
+		super(xcord, ycord,0,0);
 		// TODO Auto-generated constructor stub
 	}
 

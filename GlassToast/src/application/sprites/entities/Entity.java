@@ -10,8 +10,8 @@ public abstract class Entity extends Sprite{
 	protected double handX;
 	protected double handY;
 	
-	public Entity(int xcord, int ycord,double hX, double hY,Game g) {
-		super(xcord, ycord,g);
+	public Entity(int xcord, int ycord,double hX, double hY) {
+		super(xcord, ycord);
 		handX = hX;
 		handY = hY;
 	}

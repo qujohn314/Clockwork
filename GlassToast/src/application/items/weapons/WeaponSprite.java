@@ -31,26 +31,23 @@ public class WeaponSprite extends Sprite{
 	private int frameCount;
 	
 	public WeaponSprite(String pic,Weapon.WeaponType t,Entity e) {
-		super(0, 0,Game.getGame());
+		super(0, 0);
 		type = t;
 		width = 20;
 		height = 30;
 		imgPath = pic;
 		entity = e;
-		spriteBoxDim = 32;
 		downSweep = true;
 		img.setPreserveRatio(true);
-		spriteBoxScale = 2;
 		try {
 			spriteSheet = new Image(new FileInputStream("src/res/pics/" + imgPath));
-			spriteSheetSize = spriteSheet.getWidth()*spriteBoxScale;
 			img.setImage(spriteSheet);
 		} catch (FileNotFoundException ex) {System.out.println("Error Loading Pic");}
 		setHitBox();
 		
 		Game.getGame().addSprite(this);
 		attacking = false;
-		generateFrameViewports(spriteBoxDim,spriteBoxScale,7);
+		generateFrameViewports(10,7);
 	
 		rotation = new Rotate();
 		rotation.setPivotX(x);
@@ -111,10 +108,10 @@ public class WeaponSprite extends Sprite{
 	@Override 
 	public void rescale(){
 		try {
-			img.setImage(new Image(new FileInputStream("src/res/pics/" + imgPath),spriteSheetSize,spriteSheetSize,true,false));
+			img.setImage(new Image(new FileInputStream("src/res/pics/" + imgPath),32,32,true,false));
 		} catch (FileNotFoundException e) {	}
 		
-		generateFrameViewports(spriteBoxDim,spriteBoxScale,7);
+		generateFrameViewports(32,7);
 		
 		img.setScaleX(Game.scaleX*0.5);
 		img.setScaleY(Game.scaleY*0.5);

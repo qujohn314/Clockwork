@@ -13,32 +13,31 @@ import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 public abstract class Sprite {
-	protected double x;
-	protected double y;
+	protected double x,y;
 	protected ImageView img;
 	protected Rectangle hitBox;
-	protected double width,height;
+	protected int width,height;
 	protected Game game;
-	protected Rectangle2D[] animationCycle;
-	protected Rectangle2D[][] animationSet;
-	protected int currentAnimationCycle;
-	protected int currentImgFrame,spriteBoxDim,spriteBoxScale;
+	protected Image[] animationCycle;
+	protected Image[][] animationSet;
+	protected int currentAnimationCycle,currentImgFrame;;
 	protected Timeline autoAnimation;
 	protected Image spriteSheet;
-	protected double spriteSheetSize;
+	protected int scale;
 	
-	public Sprite(double xcord,double ycord, Game g) {
-		animationCycle = new Rectangle2D[0];
-		animationSet = new Rectangle2D[][] {animationCycle};
+	public Sprite(double xcord,double ycord) {
+		animationCycle = new Image[0];
+		animationSet = new Image[][] {animationCycle};
 		currentImgFrame = 0;
 		currentAnimationCycle = 0;
 		x = xcord;
 		y = -ycord;
-		game = g;
+		game = Game.getGame();
 		img = new ImageView();
 		img.setPreserveRatio(true);
 		
@@ -62,34 +61,31 @@ public abstract class Sprite {
 	 * @param s - Each s[n] value is the number of frames for an animationCycle. Each 's' is a new separate animation cycle
 	 * @param dim -Dimension of imgBox
 	 */
-	protected void generateFrameViewports(int dim,int scale,int...s) {
+	protected void generateFrameViewports(int dim,int...s) {
+		Image[][] matrixHolder = new Image[s.length][0];
+		Image[] holder;
 		
-		int imgX = 0;
-		int imgY = 0;
-		dim = (int)(dim*scale);
-		
-		Rectangle2D[][] holder = new Rectangle2D[s.length][0];
 		for(int r = 0;r<s.length;r++) {
-			holder[r] = new Rectangle2D[s[r]];
-			for(int i = 0;i<holder[r].length;i++) {
-				holder[r][i] = new Rectangle2D(imgX,imgY,dim,dim);
-				imgX += dim;
+			holder = new Image[s[r]];
+			for(int c = 0;c<holder.length;c++) {
+				holder[c] = new WritableImage(img.getImage().getPixelReader(),c*dim,r*dim,dim,dim);
 			}
-			imgY += dim ;
+			matrixHolder[r] = holder;
 		}
-		animationSet = holder;
+		
+		animationSet = matrixHolder;
 		animationCycle = animationSet[0];
-		img.setViewport(animationCycle[0]);
+
 	}
 	
 	protected void setAnimationFrame(int i) {
 		if(i > animationCycle.length-1)
 			return;
-		img.setViewport(animationCycle[i]);
+		img.setImage(animationCycle[i]);
 	}
 	
 	protected void nextFrame() {
-		img.setViewport(animationCycle[currentImgFrame]);
+		img.setImage(animationCycle[currentImgFrame]);
 		currentImgFrame++;
 		if(currentImgFrame >= animationCycle.length)
 			currentImgFrame = 0;
@@ -107,7 +103,7 @@ public abstract class Sprite {
 		autoAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(animateDelaySECONDS), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				img.setViewport(animationCycle[currentImgFrame]);
+				img.setImage(animationCycle[currentImgFrame]);
 				currentImgFrame++;
 				if(currentImgFrame >= animationCycle.length)
 					currentImgFrame = 0;
@@ -154,10 +150,10 @@ public abstract class Sprite {
 		return y;
 	}
 
-	protected void setBaseSpriteSheet(String n) {
+	protected void setBaseSpriteSheet(String n,int scl) {
 		try {
-			spriteSheet = new Image(new FileInputStream("src/res/pics/" + n));
-			spriteSheetSize = spriteSheet.getWidth()*spriteBoxScale;
+			Image tempImg =  new Image(new FileInputStream("src/res/pics/" + n));
+			spriteSheet = new Image(new FileInputStream("src/res/pics/"+n),scl * tempImg.getWidth(),scl*tempImg.getHeight(),true,false);
 			img.setImage(spriteSheet);
 		} catch (FileNotFoundException e) {System.out.println("Error Loading Player");}
 	}

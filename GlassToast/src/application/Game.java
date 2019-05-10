@@ -149,10 +149,10 @@ public class Game extends StackPane{
 		this.getChildren().add(equippedWeapon);
 		
 
-		player = new Player(0,0,this);
-		 chest = new Chest(-30,20,this);
-		Chest chest2 = new Chest(50,20,this);
-		Chest chest3 = new Chest(130,20,this);
+		player = new Player(0,0);
+		 chest = new Chest(-30,20);
+		Chest chest2 = new Chest(50,20);
+		Chest chest3 = new Chest(130,20);
 		
 		
 	
