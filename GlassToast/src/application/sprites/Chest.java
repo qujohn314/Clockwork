@@ -29,14 +29,14 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 		width = 32;
 		height = 32;
 		opened = false;
-		
-		try {
-			img.setImage(new Image(new FileInputStream("src/res/pics/Chest.png"),64,64,true,false));
-		} catch (FileNotFoundException e) {System.out.println("Error Loading Pic");}
-		
-		img.setScaleX(1);
-		img.setScaleY(1);
+		scale = 1;
+		img.setPreserveRatio(true);
+	
+
 		setHitBox();
+		setBaseSpriteSheet("Chest.png",scale);
+		generateFrameViewports(width*scale,2);
+		
 		game.addSprite(this);
 		openLabel = new ImageView();
 		openLabel.setVisible(false);
@@ -61,12 +61,12 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 	
 	@Override
 	public void rescale() {
-		try {
-			img.setImage(new Image(new FileInputStream("src/res/pics/Chest.png"),42*Game.scaleX*0.6,Game.scaleY*42*0.6,true,false));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		setBaseSpriteSheet("Chest.png",scale);
+		generateFrameViewports(width*scale,2);
+		
+		img.setScaleX(Game.scaleX * 0.6);
+		img.setScaleY(Game.scaleY* 0.6);
 		
 		hitBox.setWidth(width*Game.scaleX*.75);
 		hitBox.setHeight(height * Game.scaleY*.75);
@@ -98,9 +98,7 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 		opened = true;
 		openLabel.setVisible(false);
 		System.out.println(Arrays.toString(lootTable.lootItems().toArray()));
-		try {
-			img.setImage(new Image(new FileInputStream("src/res/pics/ChestOpen.png"),42*Game.scaleX*0.6,Game.scaleY*42*0.6,true,false));
-		} catch (FileNotFoundException e) {System.out.println("Error Loading Pic");}
+		setAnimationFrame(1);
 	}
 	
 	@Override

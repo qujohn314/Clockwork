@@ -75,7 +75,7 @@ public abstract class Sprite {
 		
 		animationSet = matrixHolder;
 		animationCycle = animationSet[0];
-
+		img.setImage(animationCycle[0]);
 	}
 	
 	protected void setAnimationFrame(int i) {

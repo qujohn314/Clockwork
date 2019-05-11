@@ -51,19 +51,19 @@ public class Player extends Entity implements Serializable{
 		interactRequests = new PriorityQueue<Interactable>();
 		canInteract = true;
 		img.setPreserveRatio(true);
-		scale = 4;
+		scale = 2;
 		
 		weapon = Weapon.Melee.ghostIron(this);
 
 		setHitBox();
 		
 		setBaseSpriteSheet("Player.png",scale);
-
+		generateFrameViewports(width*scale,2);
+		autoAnimate(0.07);
 		img.setFocusTraversable(true);
 		img.requestFocus();
 		
-		generateFrameViewports(width*scale,2);
-		autoAnimate(0.07);
+		
 		
 		img.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->{
 			if(event.getCode()  == KeyCode.W) {
@@ -85,8 +85,10 @@ public class Player extends Entity implements Serializable{
 					canInteract = false;
 				}
 				if(canAttack) {
-					weapon.attack();
-					canAttack = false;
+					if(!weapon.weaponSprite.attacking) {
+						weapon.attack();
+						canAttack = false;
+					}
 					
 				}
 			}	
@@ -106,7 +108,7 @@ public class Player extends Entity implements Serializable{
 			}
 			if(event.getCode()  == KeyCode.SPACE) {
 				canInteract = true;
-				if(!weapon.weaponSprite.attacking)
+				
 					canAttack = true;
 			}	
 		});
@@ -146,14 +148,8 @@ public class Player extends Entity implements Serializable{
 	@Override
 	public void rescale() {
 		
-		try {
-			img.setImage(new Image(new FileInputStream("src/res/pics/Player.png"),32,32,true,false));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		generateFrameViewports(32,2);
+		setBaseSpriteSheet("Player.png",scale);
+		generateFrameViewports(width*scale,2);
 		
 		
 		img.setScaleX(Game.scaleX*0.85);
