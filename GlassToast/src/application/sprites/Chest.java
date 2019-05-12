@@ -64,17 +64,19 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 		
 		setBaseSpriteSheet("Chest.png",scale);
 		generateFrameViewports(width*scale,2);
+		if(opened)
+			setAnimationFrame(1);
 		
-		img.setScaleX(Game.scaleX * 0.6);
-		img.setScaleY(Game.scaleY* 0.6);
+		img.setScaleX(Game.scaleX * 0.7);
+		img.setScaleY(Game.scaleY* 0.7);
 		
-		hitBox.setWidth(width*Game.scaleX*.75);
-		hitBox.setHeight(height * Game.scaleY*.75);
+		hitBox.setWidth(width*Game.scaleX);
+		hitBox.setHeight(height * Game.scaleY);
 		
 		
 		openLabel.setScaleX(Game.scaleX*0.15);
 		openLabel.setScaleY(Game.scaleY*0.15);
-	}
+	} 
 
 	@Override
 	public void render() {
@@ -89,7 +91,7 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 	}
 	@Override
 	public Rectangle2D getHitBox() {
-		return new Rectangle2D((x-5)* Game.scaleX,y * Game.scaleY,width*Game.scaleX * 0.75,height * Game.scaleY * 0.75);
+		return new Rectangle2D(x*Game.scaleX,(y+5) * Game.scaleY,width*Game.scaleX,height * Game.scaleY);
 	}
 
 	@Override

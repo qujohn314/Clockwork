@@ -12,6 +12,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			
 			Game.newGame();
 			Scene scene = new Scene(Game.getGame(),1200,675);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -21,10 +22,15 @@ public class Main extends Application {
 			primaryStage.getIcons().add(new Image(new FileInputStream("src/res/pics/icon.png")));
 			//primaryStage.setFullScreenExitHint("Nice");
 			//primaryStage.setFullScreen(true);
-		
-			Game.getGame().init(scene);
 			
+			
+
 			primaryStage.setMaximized(true);
+			Game.getGame().init(scene);
+			Game.scaleX = (Game.getGame().width / 1200) * 2;
+			Game.scaleY = (Game.getGame().height / 675) * 2;
+			Game.getGame().rescale();
+			//
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

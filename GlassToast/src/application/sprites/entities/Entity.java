@@ -9,6 +9,7 @@ public abstract class Entity extends Sprite{
 	
 	protected double handX;
 	protected double handY;
+	public int direction;
 	
 	public Entity(int xcord, int ycord,double hX, double hY) {
 		super(xcord, ycord);

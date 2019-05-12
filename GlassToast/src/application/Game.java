@@ -25,11 +25,10 @@ public class Game extends StackPane{
 	private static Game game;
 	public Player player;
 	private Scene scene;
-	private double width;
-	private double height;
+	protected double width;
+	protected double height;
 	private HashSet<String> keyInput;
-	public GraphicsContext graphics;
-	private Canvas canvas;
+	private TileGraphics canvas;
 	public StackPane hitBoxes,interactables,textBoxes,weaponBoxes,equippedWeapon,characters;
 	public boolean showHitBoxes;
 	public static double scaleX,scaleY;
@@ -41,8 +40,9 @@ public class Game extends StackPane{
 	private static boolean newGameMade = false;
 	
 	public void render() {	
+
 		for(Sprite s:sprites) {
-			
+
 			for(int i = 0;i<sprites.size();i++) {
 				if(sprites.get(i).equals(s))
 					continue;
@@ -112,8 +112,7 @@ public class Game extends StackPane{
 		keyInput = new HashSet<String>();
 	
 		
-		canvas = new Canvas();
-		graphics = canvas.getGraphicsContext2D();
+		canvas = new TileGraphics();
 		canvas.setHeight(height);
 		canvas.setWidth(width);
 		
@@ -141,6 +140,7 @@ public class Game extends StackPane{
 		weaponBoxes.setPrefWidth(width);
 		weaponBoxes.setPrefHeight(height);
 		
+		this.getChildren().add(canvas);
 		this.getChildren().add(hitBoxes);
 		this.getChildren().add(weaponBoxes);
 		this.getChildren().add(interactables);
@@ -149,10 +149,7 @@ public class Game extends StackPane{
 		this.getChildren().add(equippedWeapon);
 		
 
-		player = new Player(0,0);
-		 chest = new Chest(-30,20);
-		Chest chest2 = new Chest(50,20);
-		Chest chest3 = new Chest(130,20);
+		canvas.initRoom();
 		
 		
 	
@@ -160,7 +157,7 @@ public class Game extends StackPane{
 		this.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->{
 			if(event.getCode() == KeyCode.F1) {
 				showHitBoxes = !showHitBoxes;
-				System.out.println("toggleOn");
+				System.out.println("toggleHitBoxesOn");
 			}
 		});
 		
@@ -179,6 +176,11 @@ public class Game extends StackPane{
 			    }
 			});
 	
+			
+			player = new Player(0,0);
+			 chest = new Chest(-30,20);
+			Chest chest2 = new Chest(50,20);
+			Chest chest3 = new Chest(130,20);
 		
 			renderer = new AnimationTimer() {
 				@Override
@@ -209,7 +211,7 @@ public class Game extends StackPane{
 			};
 			
 			renderer.start();
-		
+			
 		
 	}
 }

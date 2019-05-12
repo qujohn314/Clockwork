@@ -26,9 +26,10 @@ public class WeaponSprite extends Sprite{
 	Weapon.WeaponType type;
 	Timeline attackAnimation;
 	public boolean attacking;
-	private boolean downSweep;
+	private boolean downSweep,flipped;
 	private Rotate rotation;
 	private int frameCount;
+	private int rotationD;
 	
 	public WeaponSprite(String pic,Weapon.WeaponType t,Entity e) {
 		super(0, 0);
@@ -38,6 +39,10 @@ public class WeaponSprite extends Sprite{
 		height = 32;
 		imgPath = pic;
 		entity = e;
+		if(e.direction == 2) 
+			rotationD = -1;
+		if(e.direction == 3) 
+			rotationD = 1;
 		downSweep = true;
 		img.setPreserveRatio(true);
 		setBaseSpriteSheet(imgPath,scale);
@@ -55,29 +60,30 @@ public class WeaponSprite extends Sprite{
 		attackAnimation = new Timeline();
 		
 		if(type == Weapon.WeaponType.SWORD) {
-		attackAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(0.025), new EventHandler<ActionEvent>() {
+		attackAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(0.03), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				
+			//	System.out.println(img.getRotate());
 				nextFrame();
-				if(img.getRotate() >= 90)
+				
+					
+				if(img.getRotate() >= (90) && rotationD == 1) 
+					downSweep = false;
+				else if(img.getRotate() <= (-90) && rotationD == -1)
 					downSweep = false;
 				
 				if(!downSweep) {
-					img.setRotate(img.getRotate()-15);
-					hitBox.setRotate(hitBox.getRotate()-15);
+					img.setRotate(img.getRotate()-(15*rotationD));
+					hitBox.setRotate(hitBox.getRotate()-(15*rotationD));
 					
 				}
 				else {
-					img.setRotate(img.getRotate() + 15);
-					hitBox.setRotate(hitBox.getRotate()+15);
+					img.setRotate(img.getRotate() + (15*rotationD));
+					hitBox.setRotate(hitBox.getRotate()+(15*rotationD));
 				}
 				
 				if(img.getRotate() == 0) {
-					downSweep = true;
-					attacking = false;
-					setAnimationFrame(0);
-					System.out.println(attacking);
+					stopAttack();
 				}
 			}
 			
@@ -97,19 +103,28 @@ public class WeaponSprite extends Sprite{
 		if(!attacking) {
 			attacking = true;
 			System.out.println(attacking);
-			attackAnimation.setCycleCount(12);
+			attackAnimation.setCycleCount(Timeline.INDEFINITE);
 			attackAnimation.play();
 		}
 	}
 	
+	protected void stopAttack() {
+		flipped = true;
+		attackAnimation.stop();
+		img.setRotate(0);
+		hitBox.setRotate(0);
+		downSweep = true;
+		attacking = false;
+		setAnimationFrame(0);
+	}
 	
 	@Override 
 	public void rescale(){
 		img.setScaleX(Game.scaleX*0.5);
 		img.setScaleY(Game.scaleY*0.5);
 		
-		hitBox.setWidth(width*Game.scaleX*0.7);
-		hitBox.setHeight(height * Game.scaleY*1.2);
+		hitBox.setWidth(width*Game.scaleX*0.4);
+		hitBox.setHeight(height * Game.scaleY*1.1);
 	}
 
 	@Override
@@ -127,7 +142,13 @@ public class WeaponSprite extends Sprite{
 	public void render() {
 		x = entity.getHandX();
 		y = entity.getHandY();
+		if((rotationD == -1 && entity.direction == 3) ||(rotationD == 1 && entity.direction == 2))
+			stopAttack();
 		
+		if(entity.direction == 2) 
+			rotationD = -1;
+		if(entity.direction == 3) 
+			rotationD = 1;
 		img.setTranslateX(x);
 		img.setTranslateY(y);
 		renderHitBox(Game.getGame().showHitBoxes);

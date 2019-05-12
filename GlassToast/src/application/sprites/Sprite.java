@@ -29,6 +29,7 @@ public abstract class Sprite {
 	protected Timeline autoAnimation;
 	protected Image spriteSheet;
 	protected int scale;
+	protected boolean isAutoAnimate;
 	
 	public Sprite(double xcord,double ycord) {
 		animationCycle = new Image[0];
@@ -82,6 +83,7 @@ public abstract class Sprite {
 		if(i > animationCycle.length-1)
 			return;
 		img.setImage(animationCycle[i]);
+		currentImgFrame = i;
 	}
 	
 	protected void nextFrame() {
@@ -92,10 +94,13 @@ public abstract class Sprite {
 	}
 	
 	protected void setAnimationCycle(int i) {
+	
 		if(i > animationSet.length-1)
 			return;
 		currentAnimationCycle = i;
 		animationCycle = animationSet[i];
+		img.setImage(animationCycle[0]);
+		currentImgFrame = 0;
 	}
 	
 	protected void autoAnimate(double animateDelaySECONDS) {
@@ -112,10 +117,12 @@ public abstract class Sprite {
 		}));
 		autoAnimation.setCycleCount(Timeline.INDEFINITE);
 		autoAnimation.play();
+		isAutoAnimate = true;
 	}
 	
 	public void stopAutoAnimate() {
 		autoAnimation.stop();
+		isAutoAnimate = false;
 	}
 	
 	protected abstract void setHitBox();

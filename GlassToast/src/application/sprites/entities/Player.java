@@ -32,7 +32,8 @@ public class Player extends Entity implements Serializable{
 	private PriorityQueue<Interactable> interactRequests;
 	private ArrayList<Item> inventory;
 	private Weapon weapon;
-	private boolean canAttack;
+	private boolean canAttack, idle;
+	private int stepCount;
 	
 	private boolean canInteract;
 	
@@ -52,18 +53,19 @@ public class Player extends Entity implements Serializable{
 		canInteract = true;
 		img.setPreserveRatio(true);
 		scale = 2;
-		
+		stepCount = 0;
+		idle = false;
+		direction = 3;
 		weapon = Weapon.Melee.ghostIron(this);
 
 		setHitBox();
 		
 		setBaseSpriteSheet("Player.png",scale);
-		generateFrameViewports(width*scale,2);
-		autoAnimate(0.07);
+		generateFrameViewports(width*scale,4,4,4,4);
 		img.setFocusTraversable(true);
 		img.requestFocus();
 		
-		
+		autoAnimate(0.12);
 		
 		img.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->{
 			if(event.getCode()  == KeyCode.W) {
@@ -84,13 +86,7 @@ public class Player extends Entity implements Serializable{
 						interactRequests.poll().interact();
 					canInteract = false;
 				}
-				if(canAttack) {
-					if(!weapon.weaponSprite.attacking) {
-						weapon.attack();
-						canAttack = false;
-					}
-					
-				}
+				
 			}	
 		});
 		img.addEventFilter(javafx.scene.input.KeyEvent.KEY_RELEASED, event ->{
@@ -109,14 +105,19 @@ public class Player extends Entity implements Serializable{
 			if(event.getCode()  == KeyCode.SPACE) {
 				canInteract = true;
 				
-					canAttack = true;
 			}	
 		});
-		img.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED, event ->{
-			
+		Game.getGame().addEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED, event ->{
+			if(canAttack) {
+				if(!weapon.weaponSprite.attacking) {
+					weapon.attack();
+					canAttack = false;
+				}
+				
+			}
 		});
-		img.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_RELEASED, event ->{
-			
+		Game.getGame().addEventFilter(javafx.scene.input.MouseEvent.MOUSE_RELEASED, event ->{
+			canAttack = true;
 		});
 		game.addSprite(this);
 	}
@@ -136,11 +137,18 @@ public class Player extends Entity implements Serializable{
 	}
 	
 	public void moveY(double amt) {
+		double newY = (amt*-1) + y;
+		if(!((newY*Game.scaleY >= (Game.getGame().getHeight()/2) - (height * img.getScaleY()))) &&
+				!((newY*Game.scaleX <= -(Game.getGame().getHeight()/2) + (height * img.getScaleY()))))
 		y += amt*-1;
 	}
 	
 	public void moveX(double amt) {
-		x += amt;
+		double newX = amt+x;
+		if(!((newX*Game.scaleX >= (Game.getGame().getWidth()/2) - (width*img.getScaleX()))) &&
+				!((newX*Game.scaleX <= -(Game.getGame().getWidth()/2) + (width*img.getScaleX()))))
+			x += amt;
+		
 	}
 	
 	
@@ -149,14 +157,17 @@ public class Player extends Entity implements Serializable{
 	public void rescale() {
 		
 		setBaseSpriteSheet("Player.png",scale);
-		generateFrameViewports(width*scale,2);
-		
+		generateFrameViewports(width*scale,4,4,4,4);
+		animationCycle = animationSet[currentAnimationCycle];
+		img.setImage(animationCycle[currentImgFrame]);
+
+
 		
 		img.setScaleX(Game.scaleX*0.85);
 		img.setScaleY(Game.scaleY*0.85);
 		
-		hitBox.setWidth(width*Game.scaleX*1.6);
-		hitBox.setHeight(height * Game.scaleY*1.5);
+		hitBox.setWidth(20*Game.scaleX*1.6);
+		hitBox.setHeight(30 * Game.scaleY*1.5);
 	}
 	
 	@Override
@@ -180,46 +191,152 @@ public class Player extends Entity implements Serializable{
 				
 				moveY(newSpeedY / Math.sqrt(2));
 				moveX(-newSpeedX/ Math.sqrt(2));
+				idle = false;
+				stepCount++;
+				direction = 2;
+			
+				if(isAutoAnimate)
+					stopAutoAnimate();
+				if(currentAnimationCycle != 3)
+					setAnimationCycle(3);
+				else if(stepCount >= 5) {
+					nextFrame();
+					stepCount = 0;
+				}
 				
 			}
 			else if(game.getKeyInputs().contains("W") && game.getKeyInputs().contains("D")) {
 				
 				moveY(newSpeedY / Math.sqrt(2));
 				moveX(newSpeedX/ Math.sqrt(2));
+				idle = false;
+				stepCount++;
+				direction = 3;
+			
+				if(isAutoAnimate)
+					stopAutoAnimate();
+				if(currentAnimationCycle != 1)
+					setAnimationCycle(1);
+				else if(stepCount >= 5) {
+					nextFrame();
+					stepCount = 0;
+				}
 			}
 			else if(game.getKeyInputs().contains("S") && game.getKeyInputs().contains("A")) {
 				
 				moveY(-newSpeedY / Math.sqrt(2));
 				moveX(-newSpeedX/ Math.sqrt(2));
+				stepCount++;
+				direction = 2;
+			
+				if(isAutoAnimate)
+					stopAutoAnimate();
+				if(currentAnimationCycle != 3)
+					setAnimationCycle(3);
+				else if(stepCount >= 5) {
+					nextFrame();
+					stepCount = 0;
+				}
 			}
 			else if(game.getKeyInputs().contains("S") && game.getKeyInputs().contains("D")) {
 				
 				moveY(-newSpeedY / Math.sqrt(2));
 				moveX(newSpeedX/ Math.sqrt(2));
+				idle = false;
+				stepCount++;
+				direction = 3;
+		
+				if(isAutoAnimate)
+					stopAutoAnimate();
+				if(currentAnimationCycle != 1)
+					setAnimationCycle(1);
+				else if(stepCount >= 5) {
+					nextFrame();
+					stepCount = 0;
+				}
 			}
 		}
 			else {
 				if(game.getKeyInputs().contains("W")) {
-				
+					idle = false;
+					stepCount++;
 					moveY(newSpeedY);
+					if(isAutoAnimate)
+						stopAutoAnimate();
+					if(direction == 3 && currentAnimationCycle != 1)
+						setAnimationCycle(1);
+					else if(direction == 2  && currentAnimationCycle != 3)
+						setAnimationCycle(3);
+					if(stepCount >= 5) {
+						nextFrame();
+						stepCount = 0;
+					}
+					
 				}
 				if(game.getKeyInputs().contains("S")) {
-				
+					idle = false;
+					stepCount++;
 					moveY(-newSpeedY);
+					if(isAutoAnimate)
+						stopAutoAnimate();
+					if(direction == 3 && currentAnimationCycle != 1)
+						setAnimationCycle(1);
+					else if(direction == 2  && currentAnimationCycle != 3)
+						setAnimationCycle(3);
+					if(stepCount >= 5) {
+						nextFrame();
+						stepCount = 0;
+					}
 				}
 				if(game.getKeyInputs().contains("A")) {
-				
+					idle = false;
+					stepCount++;
+					direction = 2;
 					moveX(-newSpeedX);
+					if(isAutoAnimate)
+						stopAutoAnimate();
+					if(currentAnimationCycle != 3)
+						setAnimationCycle(3);
+					else if(stepCount >= 5) {
+						nextFrame();
+						stepCount = 0;
+					}
+					
 				}
 				if(game.getKeyInputs().contains("D")) { 
-					
+					idle = false;
+					stepCount++;
+					direction = 3;
 					moveX(newSpeedX);
+					if(isAutoAnimate)
+						stopAutoAnimate();
+					if(currentAnimationCycle != 1)
+						setAnimationCycle(1);
+					else if(stepCount >= 5) {
+						nextFrame();
+						stepCount = 0;
+					}
+					
+				}
+				if(!isMoving()) {
+					idle = true;
+					if(currentAnimationCycle % 2 == 1) {
+						setAnimationCycle(currentAnimationCycle-1);
+						autoAnimate(0.12);
+					}
+						
 				}
 			}
 		
+		if(direction == 3) {
+			handX = (x+width-12)*Game.scaleX;
+			handY = (y+height-35)*Game.scaleY;
+		}else if(direction == 2) {
+			handX = (x-width+12)*Game.scaleX;
+			handY = (y+height-35)*Game.scaleY;
+		}
 		
-		handX = (x+width-12)*Game.scaleX;
-		handY = (y+height-35)*Game.scaleY;
+		
 		
 		img.setTranslateX(x * Game.scaleX);
 		img.setTranslateY(y * Game.scaleY);
@@ -238,7 +355,7 @@ public class Player extends Entity implements Serializable{
 	}
 	
 	public Rectangle2D getHitBox() {
-		return new Rectangle2D(x* Game.scaleX,y * Game.scaleY,width*Game.scaleX * 1.6,height * Game.scaleY * 1.5);
+		return new Rectangle2D(x* Game.scaleX,y * Game.scaleY,20*Game.scaleX * 1.6,30 * Game.scaleY * 1.5);
 	}
 
 
@@ -247,7 +364,10 @@ public class Player extends Entity implements Serializable{
 		
 	}
 
-
+	public boolean isMoving() {
+		return ((game.getKeyInputs().contains("W") || game.getKeyInputs().contains("A") || game.getKeyInputs().contains("S")
+				|| game.getKeyInputs().contains("D")));
+	}
 	
 	
 }
