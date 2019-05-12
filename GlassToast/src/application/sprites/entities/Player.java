@@ -61,11 +61,11 @@ public class Player extends Entity implements Serializable{
 		setHitBox();
 		
 		setBaseSpriteSheet("Player.png",scale);
-		generateFrameViewports(width*scale,4,4,4,4);
+		
 		img.setFocusTraversable(true);
 		img.requestFocus();
 		
-		autoAnimate(0.12);
+		autoAnimate(0.135);
 		
 		img.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->{
 			if(event.getCode()  == KeyCode.W) {
@@ -157,7 +157,7 @@ public class Player extends Entity implements Serializable{
 	public void rescale() {
 		
 		setBaseSpriteSheet("Player.png",scale);
-		generateFrameViewports(width*scale,4,4,4,4);
+		generateFrameViewports(width*scale,4,4,4,4,2);
 		animationCycle = animationSet[currentAnimationCycle];
 		img.setImage(animationCycle[currentImgFrame]);
 
@@ -322,7 +322,7 @@ public class Player extends Entity implements Serializable{
 					idle = true;
 					if(currentAnimationCycle % 2 == 1) {
 						setAnimationCycle(currentAnimationCycle-1);
-						autoAnimate(0.12);
+						autoAnimate(0.135);
 					}
 						
 				}

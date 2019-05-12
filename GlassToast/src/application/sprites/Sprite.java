@@ -57,10 +57,11 @@ public abstract class Sprite {
 	}
 	
 	/**
-	 * NOTE: All spritesheet imgs are to be spaced 4 pixels away from surrounding imgs
+	 * 
 	 * 
 	 * @param s - Each s[n] value is the number of frames for an animationCycle. Each 's' is a new separate animation cycle
-	 * @param dim -Dimension of imgBox
+	 * @param dim -Dimension of a sprite box.
+	 * 
 	 */
 	protected void generateFrameViewports(int dim,int...s) {
 		Image[][] matrixHolder = new Image[s.length][0];

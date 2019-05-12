@@ -102,7 +102,7 @@ public class WeaponSprite extends Sprite{
 	protected void attack() {
 		if(!attacking) {
 			attacking = true;
-			System.out.println(attacking);
+		
 			attackAnimation.setCycleCount(Timeline.INDEFINITE);
 			attackAnimation.play();
 		}
@@ -110,6 +110,7 @@ public class WeaponSprite extends Sprite{
 	
 	protected void stopAttack() {
 		flipped = true;
+		
 		attackAnimation.stop();
 		img.setRotate(0);
 		hitBox.setRotate(0);
