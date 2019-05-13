@@ -30,7 +30,7 @@ public class Player extends Entity implements Serializable{
 	public int xVel;
 	public int yVel;
 	private PriorityQueue<Interactable> interactRequests;
-	private ArrayList<Item> inventory;
+	private Item[] inventory;
 	private Weapon weapon;
 	private boolean canAttack, idle;
 	private int stepCount;
@@ -42,21 +42,21 @@ public class Player extends Entity implements Serializable{
 	public Player(int xcord,int ycord) {
 		super(xcord,ycord,0,0);
 		level = 1;
-		health = 1;
-		maxHealth = 1;
+		health = 3;
+		maxHealth = 3;
 		canAttack = true;
 		x = 0;
 		y = 0;
-		silver = 0;
 		speed = 2.5;
 		width = 32;
 		height = 32;
+		inventory = new Item[15];
 		interactRequests = new PriorityQueue<Interactable>();
 		canInteract = true;
 		img.setPreserveRatio(true);
 		scale = 2;
 		stepCount = 0;
-		idle = false;
+		idle = true;
 		direction = 3;
 		weapon = Weapon.Melee.ghostIron(this);
 		batteryPower = 100;
@@ -155,7 +155,29 @@ public class Player extends Entity implements Serializable{
 		
 	}
 	
+	public boolean addToInventory(Item item) {
+		boolean added = false;
+			for(int slot = 0;slot<inventory.length;slot++) {
+				if(inventory[slot] == null) {
+					inventory[slot] = item;
+					added = true;
+					break;
+				}
+			}
+		return added;
+	}
 	
+	public void removeFromInventory(Item item) {
+		if(item == null)
+			return;
+		
+			for(int slot = 0;slot<inventory.length;slot++) {
+				if(inventory[slot] != null && inventory[slot] == item) {
+					inventory[slot] = null;
+					break;
+				}
+			}
+	}
 	
 	@Override
 	public void rescale() {
