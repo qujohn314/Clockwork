@@ -34,6 +34,8 @@ public class Player extends Entity implements Serializable{
 	private Weapon weapon;
 	private boolean canAttack, idle;
 	private int stepCount;
+	private int batteryPower;
+	private int batteryPowerMax;
 	
 	private boolean canInteract;
 	
@@ -57,7 +59,9 @@ public class Player extends Entity implements Serializable{
 		idle = false;
 		direction = 3;
 		weapon = Weapon.Melee.ghostIron(this);
-
+		batteryPower = 100;
+		batteryPowerMax = 100;
+		
 		setHitBox();
 		
 		setBaseSpriteSheet("Player.png",scale);

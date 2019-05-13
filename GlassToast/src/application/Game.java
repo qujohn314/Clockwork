@@ -38,6 +38,7 @@ public class Game extends StackPane{
 	private static final float timeStep = 0.0125f;
 	private float accumulatedTime = 0,previousTime = 0;
 	private static boolean newGameMade = false;
+
 	
 	public void render() {	
 
