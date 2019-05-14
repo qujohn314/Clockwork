@@ -4,10 +4,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.PriorityQueue;
 
 import application.Game;
 import application.Interactable;
+import application.items.Gear;
 import application.items.Item;
 import application.items.weapons.Weapon;
 import application.sprites.Chest;
@@ -36,8 +38,8 @@ public class Player extends Entity implements Serializable{
 	private int stepCount;
 	private int batteryPower;
 	private int batteryPowerMax;
-	
 	private boolean canInteract;
+	public int gears;
 	
 	public Player(int xcord,int ycord) {
 		super(xcord,ycord,0,0);
@@ -47,6 +49,7 @@ public class Player extends Entity implements Serializable{
 		canAttack = true;
 		x = 0;
 		y = 0;
+		gears = 0;
 		speed = 2.5;
 		width = 32;
 		height = 32;
@@ -87,7 +90,7 @@ public class Player extends Entity implements Serializable{
 			if(event.getCode()  == KeyCode.SPACE) {
 				if(canInteract) {
 					if(!interactRequests.isEmpty())
-						interactRequests.poll().interact();
+						interactRequests.poll().interact(this);
 					canInteract = false;
 				}
 				
@@ -157,6 +160,11 @@ public class Player extends Entity implements Serializable{
 	
 	public boolean addToInventory(Item item) {
 		boolean added = false;
+		
+		if(item instanceof Gear){
+			gears += item.getSellPrice();
+			return true;
+		}
 			for(int slot = 0;slot<inventory.length;slot++) {
 				if(inventory[slot] == null) {
 					inventory[slot] = item;
@@ -164,6 +172,7 @@ public class Player extends Entity implements Serializable{
 					break;
 				}
 			}
+			System.out.println(Arrays.toString(inventory));
 		return added;
 	}
 	
@@ -201,16 +210,11 @@ public class Player extends Entity implements Serializable{
 		double newSpeedY = speed;
 		double newSpeedX = speed;
 		
-		
-		
 		if(Game.scaleX > Game.scaleY) {
 			newSpeedY *= Game.scaleX/Game.scaleY;
 		}else {
 			newSpeedX *= Game.scaleY/Game.scaleX;
 		}
-		
-		
-		
 		
 		if(game.getKeyInputs().size() == 2) {
 			if(game.getKeyInputs().contains("W") && game.getKeyInputs().contains("A")) {
@@ -361,9 +365,7 @@ public class Player extends Entity implements Serializable{
 			handX = (x-width+12)*Game.scaleX;
 			handY = (y+height-35)*Game.scaleY;
 		}
-		
-		
-		
+
 		img.setTranslateX(x * Game.scaleX);
 		img.setTranslateY(y * Game.scaleY);
 		

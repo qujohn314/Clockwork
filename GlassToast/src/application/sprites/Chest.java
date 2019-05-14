@@ -2,6 +2,7 @@ package application.sprites;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import application.Game;
@@ -9,6 +10,7 @@ import application.Interactable;
 import application.LootTable;
 import application.LootTable.LootElement;
 import application.items.Gear;
+import application.items.Item;
 import application.items.consumables.Sealant;
 import application.sprites.entities.Player;
 import javafx.geometry.Rectangle2D;
@@ -95,11 +97,18 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 	}
 
 	@Override
-	public void interact() {
+	public void interact(Player p) {
+		
+		ArrayList<Item> lootedItems = new ArrayList<Item>();
+		lootedItems.addAll(lootTable.lootItems());
 		
 		opened = true;
 		openLabel.setVisible(false);
-		System.out.println(Arrays.toString(lootTable.lootItems().toArray()));
+		for(Item i : lootedItems)
+			p.addToInventory(i);
+			
+		System.out.println(Arrays.toString(lootedItems.toArray()));
+		System.out.println(p.gears);
 		setAnimationFrame(1);
 	}
 	

@@ -22,7 +22,7 @@ public class TileGraphics extends Canvas{
 	}
 	
 	public void initRoom() {
-		for(int i = 0;i<15;i++) {
+		for(int i = 0;i<30;i++) {
 				for(int ii = 0;ii<15;ii++) {
 			graphics.drawImage(tileSet[0], 32*scale*i, 32*scale*ii);
 			}

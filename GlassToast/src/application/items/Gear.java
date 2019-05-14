@@ -23,7 +23,6 @@ public class Gear extends Item{
 			return desc;
 		}
 		
-		
 		private Type(int v,String n,String d) {
 			val = v;
 			name = n;
