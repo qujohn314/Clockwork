@@ -3,6 +3,7 @@ package application;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import application.items.Item;
 import application.items.weapons.WeaponSprite;
 import application.sprites.Chest;
 import application.sprites.Sprite;
@@ -183,6 +184,8 @@ public class Game extends StackPane{
 			Chest chest2 = new Chest(50,20);
 			Chest chest3 = new Chest(130,20);
 		
+			Item.initFrameViewports(32*scaleX, s);
+			
 			renderer = new AnimationTimer() {
 				@Override
 				public void handle(long currentTime) {

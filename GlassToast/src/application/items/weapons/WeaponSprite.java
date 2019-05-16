@@ -1,7 +1,5 @@
 package application.items.weapons;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 import application.Game;
 import application.sprites.Sprite;
@@ -12,8 +10,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Point3D;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
