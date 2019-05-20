@@ -207,8 +207,24 @@ public abstract class Item {
 			}
 		}
 
+		
+		
+	}
+	public static class Misc extends Item{
+		int sr,sc;
+		public Misc(int p, String n, String d, int spriteRow, int spriteCol) {
+			super(p, n, d, spriteRow, spriteCol);
+			sr = spriteRow;
+			sc = spriteCol;
+		}
 
-		
-		
+		public static Misc opticCable() {
+			return new Misc(2,"Optic Cable","Wiring used for optical/awareness augments",0,6);
+		}
+
+		@Override
+		public Item createNewItemObject() {
+			return new Misc(price,name,desc,sr,sc);
+		}
 	}
 }

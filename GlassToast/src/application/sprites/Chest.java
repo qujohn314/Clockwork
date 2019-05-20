@@ -57,7 +57,7 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 		} catch (FileNotFoundException e) {System.out.println("Error Loading Player");}
 		game.textBoxes.getChildren().add(openLabel);
 	
-		lootTable = new LootTable(new LootElement(80,new Gear(Gear.Type.STEEL),2),new LootElement(80,new Sealant(),2),new LootElement(80,new Gear(Gear.Type.BRONZE),3));
+		lootTable = new LootTable(new LootElement(15,new Gear(Gear.Type.STEEL),1),new LootElement(20,new Sealant(),1),new LootElement(40,new Gear(Gear.Type.BRONZE),2));
 		
 	
 		
@@ -107,15 +107,15 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 	}
 
 	private void dropAnItem(ArrayList<Item> i) {
-		i.get(lootIndex).dropItem(this);
-		lootIndex++;
+			i.get(lootIndex).dropItem(this);
+			lootIndex++;
 	}
 	
 	@Override
 	public void interact(Player p) {
 		
 		ArrayList<Item> lootedItems = new ArrayList<Item>();
-		lootedItems.addAll(lootTable.lootItems());
+		lootedItems.addAll(lootTable.lootItems(true));
 		lootIndex = 0;
 		
 		lootAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(0.05), new EventHandler<ActionEvent>() {
@@ -128,8 +128,10 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 		opened = true;
 		openLabel.setVisible(false);
 	
-		lootAnimation.setCycleCount(lootedItems.size()-1);
-		lootAnimation.play();
+		
+		lootAnimation.setCycleCount(lootedItems.size());
+		if(!lootedItems.isEmpty())
+			lootAnimation.play();
 		
 		System.out.println(Arrays.toString(lootedItems.toArray()));
 		System.out.println(p.gears);

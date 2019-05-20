@@ -10,6 +10,7 @@ import application.sprites.Chest;
 import application.sprites.InfoText;
 import application.sprites.Sprite;
 import application.sprites.entities.Player;
+import application.sprites.entities.enemies.RazorEye;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -36,8 +37,7 @@ public class Game extends StackPane{
 	public boolean showHitBoxes;
 	public static double scaleX,scaleY;
 	private ArrayList<Sprite> sprites,removeSprites;
-	Chest chest;
-	AnimationTimer renderer;
+	private AnimationTimer renderer;
 	private static final float timeStep = 0.0125f;
 	private float accumulatedTime = 0,previousTime = 0;
 	private static boolean newGameMade = false;
@@ -223,12 +223,14 @@ public class Game extends StackPane{
 	
 			Item.initFrameViewports(32,1,10,10,10);
 			player = new Player(0,0);
-			 chest = new Chest(-30,20);
+			
+			new Chest(-30,20);
 			new Chest(50,20);
 			new Chest(130,20);
 			new Chest(200,20);
 			new Chest(-200,20);
 			new Chest(-130,20);	
+			new RazorEye(-200,200);
 			
 			renderer = new AnimationTimer() {
 				@Override

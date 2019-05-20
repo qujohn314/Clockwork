@@ -58,6 +58,6 @@ public class InfoText extends Text{
 	public void render() {
 		
 		setTranslateX(parentEntity.getX() * Game.scaleX);
-		setTranslateY((parentEntity.getY() * Game.scaleY)-(parentEntity.height*2)+boostedY-(itemInLine*20));
+		setTranslateY((parentEntity.getY() * Game.scaleY)-(parentEntity.height*Game.scaleY*0.9)+boostedY-(itemInLine*20));
 	}
 }

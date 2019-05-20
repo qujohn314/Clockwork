@@ -14,7 +14,7 @@ public class LootTable {
 			lootTable.add(e);
 	}
 	
-	public ArrayList<Item> lootItems() {
+	public ArrayList<Item> lootItems(boolean mercy) {
 		boolean pityItem = true;
 		ArrayList<Item> loot = new ArrayList<Item>();
 		for(LootElement e : lootTable) {
@@ -25,7 +25,7 @@ public class LootTable {
 				pityItem = false;
 			}
 		}
-		if(pityItem)
+		if(pityItem && mercy)
 			if(indexOfLargestDropChance() != -1)
 				loot.add(lootTable.get(indexOfLargestDropChance()).getItem());
 		return loot;
