@@ -45,7 +45,7 @@ public class WeaponSprite extends Sprite{
 		generateFrameViewports(width*scale,7);
 		setHitBox();
 		
-		Game.getGame().addSprite(this);
+	
 		attacking = false;
 	
 		rotation = new Rotate();

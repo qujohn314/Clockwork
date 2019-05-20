@@ -55,7 +55,7 @@ public class Player extends Entity implements Serializable{
 		speed = 2.5;
 		width = 32;
 		height = 32;
-		inventory = new Item[15];
+		inventory = new Item[10];
 		interactRequests = new PriorityQueue<Interactable>();
 		canInteract = true;
 		img.setPreserveRatio(true);
@@ -64,6 +64,7 @@ public class Player extends Entity implements Serializable{
 		idle = true;
 		direction = 3;
 		weapon = Weapon.Melee.ghostIron(this);
+		weapon.equip();
 		batteryPower = 100;
 		batteryPowerMax = 100;
 		

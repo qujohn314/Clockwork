@@ -12,6 +12,7 @@ import application.LootTable.LootElement;
 import application.items.Gear;
 import application.items.Item;
 import application.items.consumables.Sealant;
+import application.items.weapons.Weapon;
 import application.sprites.entities.Player;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -56,7 +57,7 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 		} catch (FileNotFoundException e) {System.out.println("Error Loading Player");}
 		game.textBoxes.getChildren().add(openLabel);
 	
-		lootTable = new LootTable(new LootElement(80,new Gear(Gear.Type.STEEL),2),new LootElement(80,new Sealant(),1),new LootElement(80,new Gear(Gear.Type.BRONZE),3));
+		lootTable = new LootTable(new LootElement(80,new Gear(Gear.Type.STEEL),2),new LootElement(80,new Sealant(),2),new LootElement(80,new Gear(Gear.Type.BRONZE),3));
 		
 	
 		

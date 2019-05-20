@@ -15,11 +15,19 @@ public class Weapon extends Item{
 	private double damage;
 	public WeaponSprite weaponSprite;
 	private Entity entity;
+	private WeaponType weaponType;
+	private String picPath;
+	private int spriteRow,spriteCol;
 	
-	public Weapon(Entity e,int p, String n, String d,double dmg,WeaponType t,String pic,int spriteRow,int spriteCol) {
-		super(p, n, d,spriteRow,spriteCol);
+	public Weapon(Entity e,int p, String n, String d,double dmg,WeaponType t,String pic,int fspriteRow,int fspriteCol) {
+		super(p, n, d,fspriteRow,fspriteCol);
 		entity = e;
 		weaponSprite = new WeaponSprite(pic,t,e);
+		weaponType = t;
+		picPath = pic;
+		spriteRow = fspriteRow;
+		spriteCol = fspriteCol;
+		damage = dmg;
 	}
 
 	
@@ -35,13 +43,15 @@ public class Weapon extends Item{
 		
 	}
 
+	public void equip() {
+		Game.getGame().addSprite(weaponSprite);
+	}
 
 
 
 	@Override
 	public Item createNewItemObject() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Weapon(entity,price,name,desc,damage,weaponType,picPath,spriteRow,spriteCol);
 	}
 	
 	
