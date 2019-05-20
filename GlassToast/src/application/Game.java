@@ -230,7 +230,7 @@ public class Game extends StackPane{
 			new Chest(200,20);
 			new Chest(-200,20);
 			new Chest(-130,20);	
-			new RazorEye(-200,200);
+			new RazorEye(0,0);
 			
 			renderer = new AnimationTimer() {
 				@Override

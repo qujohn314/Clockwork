@@ -2,6 +2,7 @@ package application.sprites.entities.enemies;
 
 import java.util.ArrayList;
 
+import application.Game;
 import application.LootTable;
 import application.LootTable.LootElement;
 import application.items.Gear;
@@ -15,11 +16,10 @@ public class RazorEye extends Enemy{
 		lootTable = new LootTable(new LootElement(25,Item.Misc.opticCable(),1),new LootElement(50,new Gear(Gear.Type.BRONZE),1));
 		behavior = Behavior.PURSUE;
 		speed = 5;
-		scale = 2;
+		scale = 1;
 		setHitBox();
 		setBaseSpriteSheet("RazorEye.png",scale);
 		generateFrameViewports(width*scale,1);
-		
 		game.addSprite(this);
 	}
 
@@ -27,6 +27,20 @@ public class RazorEye extends Enemy{
 	public void render() {
 		behavior.getBehavior(this);
 	}
+	
+	@Override
+	public void rescale() {
+		
+		setBaseSpriteSheet("RazorEye.png",scale);
+		generateFrameViewports(width*scale,2);
+		
+		img.setScaleX(Game.scaleX);
+		img.setScaleY(Game.scaleY);
+		
+		hitBox.setWidth(width*Game.scaleX*0.5);
+		hitBox.setHeight(height * Game.scaleY*0.5);
+		
+	} 
 	
 	@Override
 	public ArrayList<Item> getDrops() {

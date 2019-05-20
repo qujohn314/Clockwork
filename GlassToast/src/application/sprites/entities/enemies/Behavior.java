@@ -12,13 +12,22 @@ public enum Behavior {
 		if(this == PURSUE) {
 			double rotateAngle = 0;
 			
-			if(p.getX() >= e.getX())
+			if(p.getX() >= e.getX()) {
 				rotateAngle = Math.atan2(p.getX()-e.getX(), p.getY()-e.getY());
 
+				rotateAngle*=-1;
+				rotateAngle = rotateAngle*180/Math.PI;
+				rotateAngle+=180;
+			}else {
+				rotateAngle = Math.atan2(e.getX()-p.getX(), p.getY()-e.getY());
+				rotateAngle = rotateAngle*180/Math.PI;
+				rotateAngle+=180;
+			}
+
 			
-			rotateAngle = rotateAngle*180/Math.PI;
+			
 			e.getImg().setRotate(rotateAngle);
-			System.out.println(rotateAngle);
+			System.out.println(p.getX() + " " + e.getX()+ " " + rotateAngle);
 		}
 	}
 }
