@@ -3,9 +3,14 @@ package application.items;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import application.Game;
+import application.Interactable;
 import application.sprites.Sprite;
+import application.sprites.entities.Player;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public abstract class Item {
 	protected int price;
@@ -16,20 +21,21 @@ public abstract class Item {
 	private static Image itemSpriteSheet;
 	
 	
-	public Item(int p, String n,String d) {
+	public Item(int p, String n,String d,int spriteRow,int spriteCol) {
 		price = p;
 		name = n;
 		desc = d;
+		itemSprite = new ItemSprite(0,0,spriteRow,spriteCol,this);
 	}
 	
 	
-	public static void initFrameViewports(int dim,int...s) {
+	public static void initFrameViewports(int dim,int sc,int...s) {
 		Image[][] matrixHolder = new Image[s.length][0];
 		Image[] holder;
 		
 		try {
 			Image tempImg =  new Image(new FileInputStream("src/res/pics/ItemSheet.png"));
-			itemSpriteSheet = new Image(new FileInputStream("src/res/pics/ItemSheet.png"),dim * tempImg.getWidth(),dim*tempImg.getHeight(),true,false);
+			itemSpriteSheet = new Image(new FileInputStream("src/res/pics/ItemSheet.png"),sc * tempImg.getWidth(),sc*tempImg.getHeight(),true,false);
 		} catch (FileNotFoundException e) {}
 		
 		for(int r = 0;r<s.length;r++) {
@@ -70,38 +76,64 @@ public abstract class Item {
 		return itemSprite;
 	}
 	
-	
-	protected class ItemSprite extends Sprite{
-
+	public void dropItem() {
+		itemSprite.addItemToWorld();
+	}
 		
-		public ItemSprite(double xcord, double ycord) {
+	
+	public class ItemSprite extends Sprite{
+		
+		private Item item;
+		private boolean canPickUp;
+		
+		public ItemSprite(double xcord, double ycord,int spriteRow,int spriteCol,Item i) {
 			super(xcord, ycord);
 			width = 32;
 			height = 32;
 			scale = 1;
+			item = i;
+			canPickUp = true;
 			setHitBox();
+			img.setImage(staticAnimationSet[spriteRow][spriteCol]);
+			rescale();
 		}
 
 	
+		public void addItemToWorld() {
+			Game.getGame().addSprite(this);
+		}
 		
+		@Override
+		public void rescale() {
+			img.setScaleX(Game.scaleX * 0.6);
+			img.setScaleY(Game.scaleY* 0.6);
+			
+			hitBox.setWidth(width*Game.scaleX*0.7);
+			hitBox.setHeight(height * Game.scaleY*0.7);
+		}
 		
 		@Override
 		protected void setHitBox() {
-		
-			
+			hitBox = new Rectangle(x,y,width,height);
+			hitBox.setFill(Color.MEDIUMPURPLE);
 		}
 
 		@Override
 		public void render() {
-			
-			
+			img.setTranslateX(x * Game.scaleX);
+			img.setTranslateY(y * Game.scaleY);
 		}
 
 		@Override
 		public void onCollide(Sprite s) {
-		
-			
+			if(canPickUp && s instanceof Player) {
+				((Player)s).addToInventory(item);
+				Game.getGame().removeSprite(this);
+			}
 		}
+
+
+		
 		
 	}
 }

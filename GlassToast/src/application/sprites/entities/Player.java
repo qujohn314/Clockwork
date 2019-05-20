@@ -94,7 +94,16 @@ public class Player extends Entity implements Serializable{
 					canInteract = false;
 				}
 				
-			}	
+			}
+			if(event.getCode() == KeyCode.ENTER) {
+				if(canAttack) {
+					if(!weapon.weaponSprite.attacking) {
+						weapon.attack();
+						canAttack = false;
+					}
+					
+				}
+			}
 		});
 		img.addEventFilter(javafx.scene.input.KeyEvent.KEY_RELEASED, event ->{
 			if(event.getCode()  == KeyCode.W) {
@@ -111,8 +120,11 @@ public class Player extends Entity implements Serializable{
 			}
 			if(event.getCode()  == KeyCode.SPACE) {
 				canInteract = true;
-				
-			}	
+			}
+			
+			if(event.getCode() == KeyCode.ENTER) {
+				canAttack = true;
+			}
 		});
 		Game.getGame().addEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED, event ->{
 			if(canAttack) {

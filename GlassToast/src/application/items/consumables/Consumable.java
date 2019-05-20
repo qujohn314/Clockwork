@@ -10,8 +10,8 @@ public abstract class Consumable extends Item{
 	private Consumer<Player> effect;
 	
 	
-	public Consumable(int p,String n, String d,Consumer<Player> e) {
-		super(p,n,d);
+	public Consumable(int p,String n, String d,Consumer<Player> e,int spriteSheetRow,int spriteSheetCol) {
+		super(p,n,d,spriteSheetRow,spriteSheetCol);
 		effect = e;
 	}
 	
@@ -30,6 +30,7 @@ public abstract class Consumable extends Item{
 	public Item createNewItemObject() {
 		return createThisItem();
 	}
-		
+	
+	
 	
 }

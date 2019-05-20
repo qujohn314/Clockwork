@@ -16,8 +16,8 @@ public class Weapon extends Item{
 	public WeaponSprite weaponSprite;
 	private Entity entity;
 	
-	public Weapon(Entity e,int p, String n, String d,double dmg,WeaponType t,String pic) {
-		super(p, n, d);
+	public Weapon(Entity e,int p, String n, String d,double dmg,WeaponType t,String pic,int spriteRow,int spriteCol) {
+		super(p, n, d,spriteRow,spriteCol);
 		entity = e;
 		weaponSprite = new WeaponSprite(pic,t,e);
 	}
@@ -29,7 +29,7 @@ public class Weapon extends Item{
 	
 	public static class Melee{
 		public static Weapon ghostIron(Entity e) {
-			return new Weapon(e,70,"Ghost Iron Blade","A short sword made from a rare metal.",3.5,WeaponType.SWORD,"GhostSteelSword.png");
+			return new Weapon(e,70,"Ghost Iron Blade","A short sword made from a rare metal.",3.5,WeaponType.SWORD,"GhostSteelSword.png",0,1);
 		}
 		
 		

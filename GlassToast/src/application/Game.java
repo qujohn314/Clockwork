@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import application.items.Item;
+import application.items.Item.ItemSprite;
 import application.items.weapons.WeaponSprite;
 import application.sprites.Chest;
 import application.sprites.Sprite;
@@ -30,16 +31,16 @@ public class Game extends StackPane{
 	protected double height;
 	private HashSet<String> keyInput;
 	private TileGraphics canvas;
-	public StackPane hitBoxes,interactables,textBoxes,weaponBoxes,equippedWeapon,characters;
+	public StackPane hitBoxes,interactables,textBoxes,itemBoxes,equippedWeapon,inanimateEntities,characters;
 	public boolean showHitBoxes;
 	public static double scaleX,scaleY;
-	private ArrayList<Sprite> sprites;
+	private ArrayList<Sprite> sprites,removeSprites;
 	Chest chest;
 	AnimationTimer renderer;
 	private static final float timeStep = 0.0125f;
 	private float accumulatedTime = 0,previousTime = 0;
 	private static boolean newGameMade = false;
-
+	private boolean removeRequest = false;
 	
 	public void render() {	
 
@@ -52,6 +53,11 @@ public class Game extends StackPane{
 					s.onCollide(sprites.get(i));
 				}
 			}
+		}
+		if(removeRequest) {
+			sprites.removeAll(removeSprites);
+			removeSprites.clear();
+			removeRequest = false;
 		}
 	}
 	
@@ -88,7 +94,11 @@ public class Game extends StackPane{
 		
 		else if(s instanceof WeaponSprite) {
 			equippedWeapon.getChildren().add(s.getImg());
-			weaponBoxes.getChildren().add(s.getFakeHitBox());
+			itemBoxes.getChildren().add(s.getFakeHitBox());
+		}
+		else if(s instanceof ItemSprite) {
+			inanimateEntities.getChildren().add(s.getImg());
+			itemBoxes.getChildren().add(s.getFakeHitBox());
 		}
 		else {
 			hitBoxes.getChildren().add(s.getFakeHitBox());
@@ -97,9 +107,28 @@ public class Game extends StackPane{
 	}
 	
 	public void removeSprite(Sprite s) {
-		if(sprites.contains(s))
-			sprites.remove(s);
-		this.getChildren().remove(s.getImg());
+		if(sprites.contains(s)) {
+			removeSprites.add(s);
+			removeRequest = true;
+			
+			if(s instanceof Interactable) {
+				interactables.getChildren().remove(s.getImg());
+				hitBoxes.getChildren().remove(s.getFakeHitBox());
+			}
+		
+			else if(s instanceof WeaponSprite) {
+				equippedWeapon.getChildren().remove(s.getImg());
+				itemBoxes.getChildren().remove(s.getFakeHitBox());
+			}
+			else if(s instanceof ItemSprite) {
+				inanimateEntities.getChildren().remove(s.getImg());
+				itemBoxes.getChildren().remove(s.getFakeHitBox());
+			}
+			else {
+				hitBoxes.getChildren().remove(s.getFakeHitBox());
+				characters.getChildren().remove(s.getImg());
+			}
+		}
 	}
 	
 	public void init(Scene s) {
@@ -138,21 +167,26 @@ public class Game extends StackPane{
 		equippedWeapon.setPrefWidth(width);
 		equippedWeapon.setPrefHeight(height);
 		
-		weaponBoxes = new StackPane();
-		weaponBoxes.setPrefWidth(width);
-		weaponBoxes.setPrefHeight(height);
+		itemBoxes = new StackPane();
+		itemBoxes.setPrefWidth(width);
+		itemBoxes.setPrefHeight(height);
+		
+		inanimateEntities = new StackPane();
+		inanimateEntities.setPrefWidth(width);
+		inanimateEntities.setPrefHeight(height);
 		
 		this.getChildren().add(canvas);
 		this.getChildren().add(hitBoxes);
-		this.getChildren().add(weaponBoxes);
+		this.getChildren().add(itemBoxes);
 		this.getChildren().add(interactables);
+		this.getChildren().add(inanimateEntities);
 		this.getChildren().add(textBoxes);
 		this.getChildren().add(characters);
 		this.getChildren().add(equippedWeapon);
 		
 
 		canvas.initRoom();
-		
+		removeSprites = new ArrayList<Sprite>();
 		
 	
 		
@@ -178,13 +212,13 @@ public class Game extends StackPane{
 			    }
 			});
 	
-			
+			Item.initFrameViewports(32,1,10,10,10);
 			player = new Player(0,0);
 			 chest = new Chest(-30,20);
 			Chest chest2 = new Chest(50,20);
 			Chest chest3 = new Chest(130,20);
 		
-			Item.initFrameViewports(32*scaleX, s);
+			
 			
 			renderer = new AnimationTimer() {
 				@Override
