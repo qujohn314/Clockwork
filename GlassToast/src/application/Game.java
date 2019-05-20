@@ -226,6 +226,7 @@ public class Game extends StackPane{
 			 chest = new Chest(-30,20);
 			new Chest(50,20);
 			new Chest(130,20);
+			new Chest(200,20);
 			new Chest(-200,20);
 			new Chest(-130,20);	
 			

@@ -387,6 +387,10 @@ public class Player extends Entity implements Serializable{
 		weapon.weaponSprite.render();
 		for(InfoText i : infoTexts)
 			i.render();
+		if(!deleteInfoTexts.isEmpty()) {
+			infoTexts.removeAll(deleteInfoTexts);
+			deleteInfoTexts.clear();
+		}
 	//	System.out.println("X:"+x + " Y:" + y);
 		
 	}

@@ -14,11 +14,13 @@ public abstract class Entity extends Sprite{
 	protected double handY;
 	public int direction;
 	public ArrayList<InfoText> infoTexts;
+	public ArrayList<InfoText> deleteInfoTexts;
 	
 	public Entity(int xcord, int ycord,double hX, double hY) {
 		super(xcord, ycord);
 		handX = hX;
 		infoTexts = new ArrayList<InfoText>();
+		deleteInfoTexts = new ArrayList<InfoText>();
 		handY = hY;
 	}
 

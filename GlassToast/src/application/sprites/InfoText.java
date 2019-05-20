@@ -30,16 +30,17 @@ public class InfoText extends Text{
 		textAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(0.05), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				setOpacity(getOpacity()-0.035);
+				setOpacity(getOpacity()-0.03);
 				boostedY-=0.5;
 			}
 		}));
-		textAnimation.setCycleCount(40);
+		textAnimation.setCycleCount(30);
 		animate();
 	}
 	
 	private void removeThis() {
 		Game.getGame().removeText(this);
+		parentEntity.deleteInfoTexts.add(this);
 	}
 	
 	public void animate() {
