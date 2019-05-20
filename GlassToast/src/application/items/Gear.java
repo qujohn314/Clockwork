@@ -3,9 +3,9 @@ package application.items;
 public class Gear extends Item{
 
 	public enum Type{
-		TITANIUM(10,"Titanium Gear","Large unbreakable gear with limitless potential.",0,2),
+		TITANIUM(10,"Titanium Gear","Large unbreakable gear with limitless potential.",0,4),
 		STEEL(5,"Steel Gear","A Large trustworthy gear made of steel.",0,3),
-		BRONZE(1,"Bronze Gear","A small gear made of bronze. Best for small jobs.",0,4);
+		BRONZE(1,"Bronze Gear","A small gear made of bronze. Best for small jobs.",0,2);
 		
 		private int val;
 		private String name;

@@ -13,18 +13,26 @@ import application.items.Gear;
 import application.items.Item;
 import application.items.consumables.Sealant;
 import application.sprites.entities.Player;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public class Chest extends Sprite implements Interactable, Comparable<Interactable>{
 
 	public ImageView openLabel;
 	private boolean opened;
 	private LootTable lootTable;
+	public boolean droppingLoot;
+	private Timeline lootAnimation;
+	private int lootIndex;
 	
 	public Chest(int xcord, int ycord) {
 		super(xcord, ycord);
@@ -33,8 +41,9 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 		opened = false;
 		scale = 1;
 		img.setPreserveRatio(true);
-	
-
+		lootAnimation = new Timeline();
+		
+		
 		setHitBox();
 		setBaseSpriteSheet("Chest.png",scale);
 		generateFrameViewports(width*scale,2);
@@ -47,7 +56,7 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 		} catch (FileNotFoundException e) {System.out.println("Error Loading Player");}
 		game.textBoxes.getChildren().add(openLabel);
 	
-		lootTable = new LootTable(new LootElement(5,new Gear(Gear.Type.STEEL),1),new LootElement(100,new Sealant(),1),new LootElement(33,new Gear(Gear.Type.BRONZE),2));
+		lootTable = new LootTable(new LootElement(80,new Gear(Gear.Type.STEEL),3),new LootElement(80,new Sealant(),5),new LootElement(80,new Gear(Gear.Type.BRONZE),115));
 		
 	
 		
@@ -96,18 +105,31 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 		return new Rectangle2D(x*Game.scaleX,(y+5) * Game.scaleY,width*Game.scaleX,height * Game.scaleY);
 	}
 
+	private void dropAnItem(ArrayList<Item> i) {
+		i.get(lootIndex).dropItem(this);
+		lootIndex++;
+	}
+	
 	@Override
 	public void interact(Player p) {
 		
 		ArrayList<Item> lootedItems = new ArrayList<Item>();
 		lootedItems.addAll(lootTable.lootItems());
+		lootIndex = 0;
+		
+		lootAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(0.05), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				dropAnItem(lootedItems);
+			}
+		}));
 		
 		opened = true;
 		openLabel.setVisible(false);
-		for(Item i : lootedItems) {
-			i.dropItem();
-		}
-			
+	
+		lootAnimation.setCycleCount(lootedItems.size()-1);
+		lootAnimation.play();
+		
 		System.out.println(Arrays.toString(lootedItems.toArray()));
 		System.out.println(p.gears);
 		setAnimationFrame(1);

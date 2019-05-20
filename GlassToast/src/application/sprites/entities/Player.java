@@ -184,7 +184,8 @@ public class Player extends Entity implements Serializable{
 					break;
 				}
 			}
-			System.out.println(Arrays.toString(inventory));
+			if(added)
+				System.out.println(Arrays.toString(inventory));
 		return added;
 	}
 	

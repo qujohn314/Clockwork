@@ -5,12 +5,18 @@ import java.io.FileNotFoundException;
 
 import application.Game;
 import application.Interactable;
+import application.sprites.Chest;
 import application.sprites.Sprite;
 import application.sprites.entities.Player;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public abstract class Item {
 	protected int price;
@@ -19,7 +25,7 @@ public abstract class Item {
 	protected ItemSprite itemSprite;
 	private static Image[][] staticAnimationSet;
 	private static Image itemSpriteSheet;
-	
+
 	
 	public Item(int p, String n,String d,int spriteRow,int spriteCol) {
 		price = p;
@@ -76,8 +82,8 @@ public abstract class Item {
 		return itemSprite;
 	}
 	
-	public void dropItem() {
-		itemSprite.addItemToWorld();
+	public void dropItem(Sprite s) {
+		itemSprite.addItemToWorld(s.getX(),s.getY(),s);
 	}
 		
 	
@@ -85,6 +91,9 @@ public abstract class Item {
 		
 		private Item item;
 		private boolean canPickUp;
+		private Timeline dropAnimation;
+		private int popOutMultiplier;
+		private int oddityFactor;
 		
 		public ItemSprite(double xcord, double ycord,int spriteRow,int spriteCol,Item i) {
 			super(xcord, ycord);
@@ -92,15 +101,42 @@ public abstract class Item {
 			height = 32;
 			scale = 1;
 			item = i;
-			canPickUp = true;
+			canPickUp = false;
+			oddityFactor = (int)(Math.random() * 60)+40;
+			popOutMultiplier = 50 < (int)(Math.random() * 100) ? 1 : -1;
+			
+			dropAnimation = new Timeline();
+			dropAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(0.0025), new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					
+					x = oddityFactor < (int)(Math.random() * 100) ? x+(1*popOutMultiplier) : x;
+					y = 40 < (int)(Math.random() * 100) ? y+1 : y;
+					
+					
+				}
+			}));
 			setHitBox();
 			img.setImage(staticAnimationSet[spriteRow][spriteCol]);
 			rescale();
+			
 		}
 
 	
-		public void addItemToWorld() {
+		public void addItemToWorld(double originX,double originY,Sprite s) {
+			x = originX;
+			y = originY;
 			Game.getGame().addSprite(this);
+			dropAnimation.setCycleCount(50);
+			
+			dropAnimation.play();
+			dropAnimation.setOnFinished(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					canPickUp = true;
+					
+				}
+			});
 		}
 		
 		@Override
@@ -127,8 +163,12 @@ public abstract class Item {
 		@Override
 		public void onCollide(Sprite s) {
 			if(canPickUp && s instanceof Player) {
-				((Player)s).addToInventory(item);
-				Game.getGame().removeSprite(this);
+				if(item instanceof Gear) {
+					((Player)s).addToInventory(item);
+					Game.getGame().removeSprite(this);
+				}else if(((Player)s).addToInventory(item)){
+					Game.getGame().removeSprite(this);
+				}
 			}
 		}
 

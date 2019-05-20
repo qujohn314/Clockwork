@@ -64,7 +64,7 @@ public class LootTable {
 		}
 		
 		public Item getItem() {
-			return item;
+			return item.createNewItemObject();
 		}
 	}
 }

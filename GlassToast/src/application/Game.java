@@ -215,8 +215,10 @@ public class Game extends StackPane{
 			Item.initFrameViewports(32,1,10,10,10);
 			player = new Player(0,0);
 			 chest = new Chest(-30,20);
-			Chest chest2 = new Chest(50,20);
-			Chest chest3 = new Chest(130,20);
+			new Chest(50,20);
+			new Chest(130,20);
+			new Chest(-200,20);
+			new Chest(-130,20);
 		
 			
 			
