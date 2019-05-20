@@ -4,6 +4,7 @@ package application.sprites;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import application.Game;
 import javafx.animation.KeyFrame;
@@ -30,6 +31,7 @@ public abstract class Sprite {
 	protected Image spriteSheet;
 	protected int scale;
 	protected boolean isAutoAnimate;
+
 	
 	public Sprite(double xcord,double ycord) {
 		animationCycle = new Image[0];
@@ -41,6 +43,7 @@ public abstract class Sprite {
 		game = Game.getGame();
 		img = new ImageView();
 		img.setPreserveRatio(true);
+
 		
 	}	
 	
@@ -141,11 +144,11 @@ public abstract class Sprite {
 	}
 	
 	public void renderHitBox(boolean b) {
+		hitBox.setTranslateX(x*Game.scaleX);
+		hitBox.setTranslateY(y*Game.scaleY);
 		if(b) {
 			if(!hitBox.isVisible())
 				hitBox.setVisible(true);
-			hitBox.setTranslateX(x*Game.scaleX);
-			hitBox.setTranslateY(y*Game.scaleY);
 		}else
 			hitBox.setVisible(false);
 	}

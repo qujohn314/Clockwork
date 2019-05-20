@@ -13,6 +13,7 @@ import application.items.Gear;
 import application.items.Item;
 import application.items.weapons.Weapon;
 import application.sprites.Chest;
+import application.sprites.InfoText;
 import application.sprites.Sprite;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
@@ -40,6 +41,7 @@ public class Player extends Entity implements Serializable{
 	private int batteryPowerMax;
 	private boolean canInteract;
 	public int gears;
+	
 	
 	public Player(int xcord,int ycord) {
 		super(xcord,ycord,0,0);
@@ -214,8 +216,8 @@ public class Player extends Entity implements Serializable{
 		img.setScaleX(Game.scaleX*0.85);
 		img.setScaleY(Game.scaleY*0.85);
 		
-		hitBox.setWidth(20*Game.scaleX*1.6);
-		hitBox.setHeight(30 * Game.scaleY*1.5);
+		hitBox.setWidth(20*Game.scaleX*1.2);
+		hitBox.setHeight(30 * Game.scaleY*1.4);
 	}
 	
 	@Override
@@ -383,7 +385,8 @@ public class Player extends Entity implements Serializable{
 		img.setTranslateY(y * Game.scaleY);
 		
 		weapon.weaponSprite.render();
-		
+		for(InfoText i : infoTexts)
+			i.render();
 	//	System.out.println("X:"+x + " Y:" + y);
 		
 	}
@@ -396,7 +399,7 @@ public class Player extends Entity implements Serializable{
 	}
 	
 	public Rectangle2D getHitBox() {
-		return new Rectangle2D(x* Game.scaleX,y * Game.scaleY,20*Game.scaleX * 1.6,30 * Game.scaleY * 1.5);
+		return new Rectangle2D(x* Game.scaleX,y * Game.scaleY,hitBox.getWidth(),hitBox.getHeight());
 	}
 
 

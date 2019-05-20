@@ -7,6 +7,7 @@ import application.items.Item;
 import application.items.Item.ItemSprite;
 import application.items.weapons.WeaponSprite;
 import application.sprites.Chest;
+import application.sprites.InfoText;
 import application.sprites.Sprite;
 import application.sprites.entities.Player;
 import javafx.animation.AnimationTimer;
@@ -104,6 +105,14 @@ public class Game extends StackPane{
 			hitBoxes.getChildren().add(s.getFakeHitBox());
 			characters.getChildren().add(s.getImg());
 		}
+	}
+	
+	public void addText(InfoText t) {
+		textBoxes.getChildren().add(t);
+	}
+	
+	public void removeText(InfoText t) {
+		textBoxes.getChildren().remove(t);
 	}
 	
 	public void removeSprite(Sprite s) {
@@ -218,9 +227,7 @@ public class Game extends StackPane{
 			new Chest(50,20);
 			new Chest(130,20);
 			new Chest(-200,20);
-			new Chest(-130,20);
-		
-			
+			new Chest(-130,20);	
 			
 			renderer = new AnimationTimer() {
 				@Override

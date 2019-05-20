@@ -6,12 +6,15 @@ import java.io.FileNotFoundException;
 import application.Game;
 import application.Interactable;
 import application.sprites.Chest;
+import application.sprites.InfoText;
 import application.sprites.Sprite;
+import application.sprites.entities.Entity;
 import application.sprites.entities.Player;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
@@ -90,10 +93,11 @@ public abstract class Item {
 	public class ItemSprite extends Sprite{
 		
 		private Item item;
-		private boolean canPickUp;
-		private Timeline dropAnimation;
+		private boolean canPickUp,idleUp;
+		private Timeline dropAnimation,idleAnimation;
 		private int popOutMultiplier;
 		private int oddityFactor;
+		private double idleLevel = 0;
 		
 		public ItemSprite(double xcord, double ycord,int spriteRow,int spriteCol,Item i) {
 			super(xcord, ycord);
@@ -104,16 +108,38 @@ public abstract class Item {
 			canPickUp = false;
 			oddityFactor = (int)(Math.random() * 60)+40;
 			popOutMultiplier = 50 < (int)(Math.random() * 100) ? 1 : -1;
-			
+			idleUp = true;
 			dropAnimation = new Timeline();
+			idleAnimation = new Timeline();
+			
 			dropAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(0.0025), new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
 					
 					x = oddityFactor < (int)(Math.random() * 100) ? x+(1*popOutMultiplier) : x;
-					y = 40 < (int)(Math.random() * 100) ? y+1 : y;
+					y = 50 < (int)(Math.random() * 100) ? y+1 : y;
 					
 					
+				}
+			}));
+			idleAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(0.05), new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					if(idleUp) {
+						if(idleLevel < 3){
+							y+=0.25;
+							idleLevel+=0.25;
+						}
+						else 
+							idleUp = false;
+					}else {
+						if(idleLevel > 0){
+							y-=0.25;
+							idleLevel-=0.25;
+						}
+						else 
+							idleUp = true;
+					}
 				}
 			}));
 			setHitBox();
@@ -128,13 +154,13 @@ public abstract class Item {
 			y = originY;
 			Game.getGame().addSprite(this);
 			dropAnimation.setCycleCount(50);
-			
+			idleAnimation.setCycleCount(Timeline.INDEFINITE);
 			dropAnimation.play();
 			dropAnimation.setOnFinished(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
 					canPickUp = true;
-					
+					idleAnimation.play();
 				}
 			});
 		}
@@ -153,6 +179,11 @@ public abstract class Item {
 			hitBox = new Rectangle(x,y,width,height);
 			hitBox.setFill(Color.MEDIUMPURPLE);
 		}
+		
+		@Override
+		public Rectangle2D getHitBox() {
+			return new Rectangle2D(x*Game.scaleX,(y+10) * Game.scaleY,hitBox.getWidth(),hitBox.getHeight());
+		}
 
 		@Override
 		public void render() {
@@ -166,8 +197,12 @@ public abstract class Item {
 				if(item instanceof Gear) {
 					((Player)s).addToInventory(item);
 					Game.getGame().removeSprite(this);
+					idleAnimation.stop();
+					Game.getGame().addText(new InfoText("+1 " + item.getName(),(Entity)s));
 				}else if(((Player)s).addToInventory(item)){
 					Game.getGame().removeSprite(this);
+					idleAnimation.stop();
+					Game.getGame().addText(new InfoText("+1 " + item.getName(),(Entity)s));
 				}
 			}
 		}

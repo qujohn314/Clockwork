@@ -1,6 +1,9 @@
 package application.sprites.entities;
 
+import java.util.ArrayList;
+
 import application.Game;
+import application.sprites.InfoText;
 import application.sprites.Sprite;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -10,10 +13,12 @@ public abstract class Entity extends Sprite{
 	protected double handX;
 	protected double handY;
 	public int direction;
+	public ArrayList<InfoText> infoTexts;
 	
 	public Entity(int xcord, int ycord,double hX, double hY) {
 		super(xcord, ycord);
 		handX = hX;
+		infoTexts = new ArrayList<InfoText>();
 		handY = hY;
 	}
 

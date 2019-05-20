@@ -56,7 +56,7 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 		} catch (FileNotFoundException e) {System.out.println("Error Loading Player");}
 		game.textBoxes.getChildren().add(openLabel);
 	
-		lootTable = new LootTable(new LootElement(80,new Gear(Gear.Type.STEEL),3),new LootElement(80,new Sealant(),5),new LootElement(80,new Gear(Gear.Type.BRONZE),115));
+		lootTable = new LootTable(new LootElement(80,new Gear(Gear.Type.STEEL),1),new LootElement(80,new Sealant(),1),new LootElement(80,new Gear(Gear.Type.BRONZE),3));
 		
 	
 		
