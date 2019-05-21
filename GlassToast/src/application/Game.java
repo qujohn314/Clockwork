@@ -10,6 +10,7 @@ import application.sprites.Chest;
 import application.sprites.InfoText;
 import application.sprites.Sprite;
 import application.sprites.entities.Player;
+import application.sprites.entities.enemies.EyeFactory;
 import application.sprites.entities.enemies.RazorEye;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -33,25 +34,27 @@ public class Game extends StackPane{
 	protected double height;
 	private HashSet<String> keyInput;
 	private TileGraphics canvas;
-	public StackPane hitBoxes,interactables,textBoxes,itemBoxes,equippedWeapon,inanimateEntities,characters;
-	public boolean showHitBoxes;
+	public StackPane hitBoxes,interactables,textBoxes,itemBoxes,equippedWeapon,inanimateEntities,characters,backCharacters;
+	public boolean showHitBoxes,gameOver;
 	public static double scaleX,scaleY;
-	private ArrayList<Sprite> sprites,removeSprites;
+	private ArrayList<Sprite> sprites,removeSprites,addSprites;
 	private AnimationTimer renderer;
 	private static final float timeStep = 0.0125f;
 	private float accumulatedTime = 0,previousTime = 0;
 	private static boolean newGameMade = false;
-	private boolean removeRequest = false;
+	private boolean removeRequest = false,addRequest = false,initRun = true;
 	
 	public void render() {	
+		ArrayList<Sprite> currentSprites = new ArrayList<Sprite>();
+		for(Sprite s : sprites)
+			currentSprites.add(s);
+		for(Sprite s:currentSprites) {
 
-		for(Sprite s:sprites) {
-
-			for(int i = 0;i<sprites.size();i++) {
-				if(sprites.get(i).equals(s))
+			for(int i = 0;i<currentSprites.size();i++) {
+				if(currentSprites.get(i).equals(s))
 					continue;
-				if(s.getCollision(sprites.get(i))) {
-					s.onCollide(sprites.get(i));
+				if(s.getCollision(currentSprites.get(i))) {
+					s.onCollide(currentSprites.get(i));
 				}
 			}
 		}
@@ -60,6 +63,7 @@ public class Game extends StackPane{
 			removeSprites.clear();
 			removeRequest = false;
 		}
+		
 	}
 	
 	public static Game getGame() {
@@ -103,7 +107,10 @@ public class Game extends StackPane{
 		}
 		else {
 			hitBoxes.getChildren().add(s.getFakeHitBox());
-			characters.getChildren().add(s.getImg());
+			if(!(s instanceof EyeFactory))
+				characters.getChildren().add(s.getImg());
+			else
+				backCharacters.getChildren().add(s.getImg());
 		}
 	}
 	
@@ -135,7 +142,10 @@ public class Game extends StackPane{
 			}
 			else {
 				hitBoxes.getChildren().remove(s.getFakeHitBox());
-				characters.getChildren().remove(s.getImg());
+				if(!(s instanceof EyeFactory))
+					characters.getChildren().remove(s.getImg());
+				else
+					backCharacters.getChildren().remove(s.getImg());
 			}
 		}
 	}
@@ -184,19 +194,25 @@ public class Game extends StackPane{
 		inanimateEntities.setPrefWidth(width);
 		inanimateEntities.setPrefHeight(height);
 		
+		backCharacters = new StackPane();
+		backCharacters.setPrefWidth(width);
+		backCharacters.setPrefHeight(height);
+		
 		this.getChildren().add(canvas);
 		this.getChildren().add(hitBoxes);
 		this.getChildren().add(itemBoxes);
 		this.getChildren().add(interactables);
+		this.getChildren().add(backCharacters);
 		this.getChildren().add(inanimateEntities);
 		this.getChildren().add(textBoxes);
+		
 		this.getChildren().add(characters);
 		this.getChildren().add(equippedWeapon);
 		
 
 		canvas.initRoom();
 		removeSprites = new ArrayList<Sprite>();
-		
+		addSprites = new ArrayList<Sprite>();
 	
 		
 		this.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->{
@@ -230,11 +246,16 @@ public class Game extends StackPane{
 			new Chest(200,20);
 			new Chest(-200,20);
 			new Chest(-130,20);	
-			new RazorEye(0,0);
+			new EyeFactory(-150,-100);
+			new EyeFactory(150,-100);
+			new EyeFactory(-150,100);
+			new EyeFactory(150,100);
+			
 			
 			renderer = new AnimationTimer() {
 				@Override
 				public void handle(long currentTime) {
+					
 					if(previousTime == 0) {
 						previousTime = currentTime;
 						return;
@@ -244,20 +265,29 @@ public class Game extends StackPane{
 					accumulatedTime += secondsElapsedCapped;
 					previousTime = currentTime;
 					
-					while(accumulatedTime >= timeStep) {
-						render();
-						accumulatedTime -= timeStep;
+					if(!initRun) {
+						while(accumulatedTime >= timeStep) {
+							render();
+							accumulatedTime -= timeStep;
+						}
 					}
 					
-					for(Sprite s:sprites) {
+					
+					ArrayList<Sprite> currentSprites = new ArrayList<Sprite>();
+					for(Sprite s : sprites)
+						currentSprites.add(s);
+					
+					for(Sprite s:currentSprites) {
 						if(!(s instanceof WeaponSprite)) {
 							s.render();	
 						s.renderHitBox(showHitBoxes);
 						}
 					}
 					
-					
-				}
+						if(initRun)
+							initRun = false;
+					}
+
 			};
 			
 			renderer.start();

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import application.Game;
 import application.sprites.InfoText;
 import application.sprites.Sprite;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -15,6 +16,8 @@ public abstract class Entity extends Sprite{
 	public int direction;
 	public ArrayList<InfoText> infoTexts;
 	public ArrayList<InfoText> deleteInfoTexts;
+	public double speed;
+
 	
 	public Entity(int xcord, int ycord,double hX, double hY) {
 		super(xcord, ycord);
@@ -32,14 +35,20 @@ public abstract class Entity extends Sprite{
 		return handY;
 	}
 	
+	
+	
+	
 	@Override
 	protected void setHitBox() {
 		hitBox = new Rectangle(x,y,width,height);
 		hitBox.setFill(Color.RED);
 	}
 	
+	public abstract void onDeath();
+	
 	@Override
 	public void render() {	
+		
 		
 		img.setTranslateX(x);
 		img.setTranslateY(y);

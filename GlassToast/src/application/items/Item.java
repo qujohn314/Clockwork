@@ -105,6 +105,7 @@ public abstract class Item {
 			height = 32;
 			scale = 1;
 			item = i;
+			
 			canPickUp = false;
 			oddityFactor = (int)(Math.random() * 60)+40;
 			popOutMultiplier = 50 < (int)(Math.random() * 100) ? 1 : -1;
@@ -145,7 +146,8 @@ public abstract class Item {
 			setHitBox();
 			img.setImage(staticAnimationSet[spriteRow][spriteCol]);
 			rescale();
-			
+			hitBox.setVisible(false);
+			img.setVisible(false);
 		}
 
 	
@@ -181,14 +183,16 @@ public abstract class Item {
 		}
 		
 		@Override
-		public Rectangle2D getHitBox() {
-			return new Rectangle2D(x*Game.scaleX,(y+10) * Game.scaleY,hitBox.getWidth(),hitBox.getHeight());
+		public Rectangle getHitBox() {
+			return hitBox;
 		}
 
 		@Override
 		public void render() {
 			img.setTranslateX(x * Game.scaleX);
 			img.setTranslateY(y * Game.scaleY);
+			if(!img.isVisible())
+				img.setVisible(true);
 		}
 
 		@Override
@@ -219,7 +223,7 @@ public abstract class Item {
 		}
 
 		public static Misc opticCable() {
-			return new Misc(2,"Optic Cable","Wiring used for optical/awareness augments",0,6);
+			return new Misc(2,"Optic Cable","Wiring used for optical/awareness augments",0,5);
 		}
 
 		@Override

@@ -26,12 +26,8 @@ public class Player extends Entity implements Serializable{
 	private static final long serialVersionUID = -7625029116892596346L;
 	
 	public int level;
-	public int health;
 	public int maxHealth;
-	public double speed;
 	public int silver;
-	public int xVel;
-	public int yVel;
 	private PriorityQueue<Interactable> interactRequests;
 	private Item[] inventory;
 	private Weapon weapon;
@@ -41,13 +37,15 @@ public class Player extends Entity implements Serializable{
 	private int batteryPowerMax;
 	private boolean canInteract;
 	public int gears;
+	public boolean dead;
+	public int health;
 	
 	
 	public Player(int xcord,int ycord) {
 		super(xcord,ycord,0,0);
 		level = 1;
-		health = 3;
-		maxHealth = 3;
+		health = 15;
+		maxHealth = 15;
 		canAttack = true;
 		x = 0;
 		y = 0;
@@ -208,7 +206,7 @@ public class Player extends Entity implements Serializable{
 	public void rescale() {
 		
 		setBaseSpriteSheet("Player.png",scale);
-		generateFrameViewports(width*scale,4,4,4,4,2);
+		generateFrameViewports(width*scale,4,4,4,4,2,1);
 		animationCycle = animationSet[currentAnimationCycle];
 		img.setImage(animationCycle[currentImgFrame]);
 
@@ -223,6 +221,11 @@ public class Player extends Entity implements Serializable{
 	
 	@Override
 	public void render() {
+		if(health <= 0 && !dead){
+			onDeath();
+			dead = true;
+		}else if(!dead){
+		
 		double newSpeedY = speed;
 		double newSpeedX = speed;
 		
@@ -392,6 +395,7 @@ public class Player extends Entity implements Serializable{
 			infoTexts.removeAll(deleteInfoTexts);
 			deleteInfoTexts.clear();
 		}
+		}
 	//	System.out.println("X:"+x + " Y:" + y);
 		
 	}
@@ -402,20 +406,28 @@ public class Player extends Entity implements Serializable{
 		hitBox.setFill(Color.RED);
 
 	}
-	
-	public Rectangle2D getHitBox() {
-		return new Rectangle2D(x* Game.scaleX,y * Game.scaleY,hitBox.getWidth(),hitBox.getHeight());
-	}
-
 
 	@Override
 	public void onCollide(Sprite s) {
 		
 	}
+	
+	public void loseHealth(double amt) {
+		health -= amt;
+		System.out.println(health +"/"+maxHealth);
+	}
 
 	public boolean isMoving() {
 		return ((game.getKeyInputs().contains("W") || game.getKeyInputs().contains("A") || game.getKeyInputs().contains("S")
 				|| game.getKeyInputs().contains("D")));
+	}
+
+	@Override
+	public void onDeath() {
+		stopAutoAnimate();
+		setAnimationCycle(5);
+		Game.getGame().removeSprite(weapon.weaponSprite);
+		Game.getGame().gameOver = true;
 	}
 	
 	

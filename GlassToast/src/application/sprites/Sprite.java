@@ -131,8 +131,8 @@ public abstract class Sprite {
 	
 	protected abstract void setHitBox();
 	
-	public Rectangle2D getHitBox() {
-		return new Rectangle2D(x * Game.scaleX,y * Game.scaleY,width*Game.scaleX,height * Game.scaleY);
+	public Rectangle getHitBox() {
+		return hitBox;
 	}
 	
 	public Rectangle getFakeHitBox() {
@@ -140,7 +140,7 @@ public abstract class Sprite {
 	}
 	
 	public boolean getCollision(Sprite s) {
-		return this.getHitBox().intersects(s.getHitBox());
+		return hitBox.intersects(hitBox.parentToLocal(s.getHitBox().getBoundsInParent()));
 	}
 	
 	public void renderHitBox(boolean b) {
@@ -159,6 +159,14 @@ public abstract class Sprite {
 	
 	public double getY() {
 		return y;
+	}
+	
+	public void setX(double newX) {
+		x = newX;
+	}
+	
+	public void setY(double newY) {
+		y = newY;
 	}
 
 	protected void setBaseSpriteSheet(String n,int scl) {

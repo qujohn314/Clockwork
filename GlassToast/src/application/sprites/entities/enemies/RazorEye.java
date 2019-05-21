@@ -7,38 +7,42 @@ import application.LootTable;
 import application.LootTable.LootElement;
 import application.items.Gear;
 import application.items.Item;
+import application.items.weapons.WeaponSprite;
 import application.sprites.Sprite;
+import application.sprites.entities.Player;
 
 public class RazorEye extends Enemy{
 	
+	private boolean suicide;
+	
 	public RazorEye(int xcord, int ycord) {
 		super(xcord, ycord);
-		lootTable = new LootTable(new LootElement(25,Item.Misc.opticCable(),1),new LootElement(50,new Gear(Gear.Type.BRONZE),1));
+		lootTable = new LootTable(new LootElement(4,Item.Misc.opticCable(),1),new LootElement(10,new Gear(Gear.Type.BRONZE),1));
 		behavior = Behavior.PURSUE;
-		speed = 5;
+		speed = 1 + Math.random() * 0.6;
 		scale = 1;
+		damage = 1;
+		health = 3;
 		setHitBox();
 		setBaseSpriteSheet("RazorEye.png",scale);
-		generateFrameViewports(width*scale,1);
+		generateFrameViewports(width*scale,3);
 		game.addSprite(this);
+		autoAnimate(0.1);
+		rescale();
 	}
 
-	@Override
-	public void render() {
-		behavior.getBehavior(this);
-	}
 	
 	@Override
 	public void rescale() {
 		
 		setBaseSpriteSheet("RazorEye.png",scale);
-		generateFrameViewports(width*scale,2);
+		generateFrameViewports(width*scale,8);
 		
 		img.setScaleX(Game.scaleX);
 		img.setScaleY(Game.scaleY);
 		
-		hitBox.setWidth(width*Game.scaleX*0.5);
-		hitBox.setHeight(height * Game.scaleY*0.5);
+		hitBox.setWidth(width*Game.scaleX*0.45);
+		hitBox.setHeight(height * Game.scaleY*0.3);
 		
 	} 
 	
@@ -51,13 +55,26 @@ public class RazorEye extends Enemy{
 
 	@Override
 	public void onCollide(Sprite s) {
+		if(s instanceof Player) {
+			((Player)s).loseHealth(damage);
+			suicide = true;
+			onDeath();
+			
+		}
+		if(s instanceof WeaponSprite && canDamageFromSprite(s)) {
+			if(((WeaponSprite)s).attacking) {
+				loseHealth(((WeaponSprite)s).weapon.getDamage());
+				addDamageSource(s);
+			}
+		}
 		
 	}
 
 	@Override
 	public void onDeath() {
-		// TODO Auto-generated method stub
-		
+		game.removeSprite(this);
+		if(!suicide)
+			lootItems();
 	}
 
 }

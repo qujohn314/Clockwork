@@ -101,10 +101,6 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 	
 		
 	}
-	@Override
-	public Rectangle2D getHitBox() {
-		return new Rectangle2D(x*Game.scaleX,(y+5) * Game.scaleY,width*Game.scaleX,height * Game.scaleY);
-	}
 
 	private void dropAnItem(ArrayList<Item> i) {
 			i.get(lootIndex).dropItem(this);
@@ -142,12 +138,12 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 	public boolean getCollision(Sprite s) {
 		if(opened)
 			return false;
-		if (s instanceof Player && !this.getHitBox().intersects(s.getHitBox())) {
+		if (s instanceof Player && !hitBox.intersects(hitBox.parentToLocal(s.getHitBox().getBoundsInParent()))) {
 			openLabel.setVisible(false);
 			((Player)s).removeInteractRequest(this);
 		}
 
-		return this.getHitBox().intersects(s.getHitBox());
+		return hitBox.intersects(hitBox.parentToLocal(s.getHitBox().getBoundsInParent()));
 	}
 
 	@Override

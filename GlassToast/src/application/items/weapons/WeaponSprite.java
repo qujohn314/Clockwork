@@ -10,6 +10,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
@@ -26,13 +27,16 @@ public class WeaponSprite extends Sprite{
 	private Rotate rotation;
 	private int frameCount;
 	private int rotationD;
+	private int atkCount = 0;
+	public Weapon weapon;
 	
-	public WeaponSprite(String pic,Weapon.WeaponType t,Entity e) {
+	public WeaponSprite(String pic,Weapon.WeaponType t,Entity e,Weapon w) {
 		super(0, 0);
 		type = t;
 		scale = 2;
 		width = 32;
 		height = 32;
+		weapon = w;
 		imgPath = pic;
 		entity = e;
 		if(e.direction == 2) 
@@ -59,10 +63,11 @@ public class WeaponSprite extends Sprite{
 		attackAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(0.03), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
+				atkCount++;
 			//	System.out.println(img.getRotate());
 				nextFrame();
-				
-					
+				if(atkCount >=2 && downSweep)
+					attacking = true;
 				if(img.getRotate() >= (90) && rotationD == 1) 
 					downSweep = false;
 				else if(img.getRotate() <= (-90) && rotationD == -1)
@@ -71,7 +76,7 @@ public class WeaponSprite extends Sprite{
 				if(!downSweep) {
 					img.setRotate(img.getRotate()-(15*rotationD));
 					hitBox.setRotate(hitBox.getRotate()-(15*rotationD));
-					
+					attacking = false;
 				}
 				else {
 					img.setRotate(img.getRotate() + (15*rotationD));
@@ -97,16 +102,18 @@ public class WeaponSprite extends Sprite{
 	
 	protected void attack() {
 		if(!attacking) {
-			attacking = true;
+			
 		
 			attackAnimation.setCycleCount(Timeline.INDEFINITE);
 			attackAnimation.play();
 		}
 	}
 	
+
+	
 	protected void stopAttack() {
 		flipped = true;
-		
+		atkCount = 0;
 		attackAnimation.stop();
 		img.setRotate(0);
 		hitBox.setRotate(0);
@@ -120,8 +127,8 @@ public class WeaponSprite extends Sprite{
 		img.setScaleX(Game.scaleX*0.5);
 		img.setScaleY(Game.scaleY*0.5);
 		
-		hitBox.setWidth(width*Game.scaleX*0.4);
-		hitBox.setHeight(height * Game.scaleY*1.1);
+		hitBox.setWidth(width*Game.scaleX*0.2);
+		hitBox.setHeight(height * Game.scaleY*0.9);
 	}
 
 	@Override
@@ -129,10 +136,10 @@ public class WeaponSprite extends Sprite{
 		if(b) {
 			if(!hitBox.isVisible())
 				hitBox.setVisible(true);
-			hitBox.setTranslateX(x);
-			hitBox.setTranslateY(y);
 		}else
 			hitBox.setVisible(false);
+		hitBox.setTranslateX(x);
+		hitBox.setTranslateY(y);
 	}
 	
 	@Override
@@ -154,8 +161,6 @@ public class WeaponSprite extends Sprite{
 	@Override
 	public void onCollide(Sprite s) {
 		if(entity instanceof Enemy) {
-			
-		}else if(entity instanceof Player) {
 			
 		}
 	}

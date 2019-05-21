@@ -22,7 +22,7 @@ public class Weapon extends Item{
 	public Weapon(Entity e,int p, String n, String d,double dmg,WeaponType t,String pic,int fspriteRow,int fspriteCol) {
 		super(p, n, d,fspriteRow,fspriteCol);
 		entity = e;
-		weaponSprite = new WeaponSprite(pic,t,e);
+		weaponSprite = new WeaponSprite(pic,t,e,this);
 		weaponType = t;
 		picPath = pic;
 		spriteRow = fspriteRow;
@@ -48,6 +48,9 @@ public class Weapon extends Item{
 	}
 
 
+	public double getDamage() {
+		return damage;
+	}
 
 	@Override
 	public Item createNewItemObject() {
