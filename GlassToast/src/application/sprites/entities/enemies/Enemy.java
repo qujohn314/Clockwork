@@ -16,7 +16,7 @@ public abstract class Enemy extends Entity{
 	protected double damage;
 	protected Behavior behavior;
 	protected boolean dead;
-	public double health;
+	public double health,maxHealth;;
 	public ArrayList<Sprite> damageSource;
 	
 	public Enemy(int xcord, int ycord) {

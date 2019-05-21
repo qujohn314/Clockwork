@@ -32,6 +32,7 @@ public class EyeFactory extends Enemy{
 		scale = 2;
 		damage = 1;
 		health = 20;
+		maxHealth = 20;
 		spawnRate = (Math.random() * 3.5) + 1.5;
 		spawnCount = ((int)Math.random()*15) + 10;
 		

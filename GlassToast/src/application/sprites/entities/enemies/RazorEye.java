@@ -22,7 +22,8 @@ public class RazorEye extends Enemy{
 		speed = 1 + Math.random() * 0.6;
 		scale = 1;
 		damage = 1;
-		health = 3;
+		health = 2;
+		maxHealth = 2;
 		setHitBox();
 		setBaseSpriteSheet("RazorEye.png",scale);
 		generateFrameViewports(width*scale,3);

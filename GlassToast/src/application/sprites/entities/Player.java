@@ -44,8 +44,8 @@ public class Player extends Entity implements Serializable{
 	public Player(int xcord,int ycord) {
 		super(xcord,ycord,0,0);
 		level = 1;
-		health = 15;
-		maxHealth = 15;
+		health = 10;
+		maxHealth = 10;
 		canAttack = true;
 		x = 0;
 		y = 0;
