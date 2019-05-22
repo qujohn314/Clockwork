@@ -16,15 +16,20 @@ public abstract class Enemy extends Entity{
 	protected double damage;
 	protected Behavior behavior;
 	protected boolean dead;
-	public double health,maxHealth;;
+	public double health,maxHealth;
 	public ArrayList<Sprite> damageSource;
+	protected HealthBar healthBar;
 	
-	public Enemy(int xcord, int ycord) {
+	public Enemy(int xcord, int ycord,int mh,int h) {
 		super(xcord, ycord,0,0);
+		maxHealth = mh;
+		health = h;
 		damageSource = new ArrayList<Sprite>();
 		width = 32;
 		height = 32;
 		img.setPreserveRatio(true);
+		healthBar = new HealthBar(this);
+		Game.getGame().addHealthBar(healthBar);
 	}
 
 	public void loseHealth(double amt) {
@@ -57,6 +62,7 @@ public abstract class Enemy extends Entity{
 	
 	@Override
 	public void render() {
+		
 		if(health <= 0) {
 			dead = true;
 			onDeath();
@@ -73,6 +79,7 @@ public abstract class Enemy extends Entity{
 			behavior.getBehavior(this);
 			img.setTranslateX(x*Game.scaleX);
 			img.setTranslateY(y*Game.scaleY);
+			healthBar.render();
 		}
 	}
 	

@@ -25,14 +25,12 @@ public class EyeFactory extends Enemy{
 	private boolean closed;
 	
 	public EyeFactory(int xcord, int ycord) {
-		super(xcord, ycord);
+		super(xcord, ycord,20,20);
 		lootTable = new LootTable(new LootElement(70,new Gear(Gear.Type.STEEL),1));
 		behavior = Behavior.STATIONARY;
 		speed = 1;
 		scale = 2;
 		damage = 1;
-		health = 20;
-		maxHealth = 20;
 		spawnRate = (Math.random() * 3.5) + 1.5;
 		spawnCount = ((int)Math.random()*15) + 10;
 		
@@ -118,6 +116,7 @@ public class EyeFactory extends Enemy{
 	@Override
 	public void onDeath() {
 		game.removeSprite(this);
+		game.removeHealthBar(healthBar);
 		spawnTimer.stop();
 		lootItems();
 	}

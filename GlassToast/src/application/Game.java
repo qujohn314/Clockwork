@@ -11,6 +11,7 @@ import application.sprites.InfoText;
 import application.sprites.Sprite;
 import application.sprites.entities.Player;
 import application.sprites.entities.enemies.EyeFactory;
+import application.sprites.entities.enemies.HealthBar;
 import application.sprites.entities.enemies.RazorEye;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -34,7 +35,7 @@ public class Game extends StackPane{
 	protected double height;
 	private HashSet<String> keyInput;
 	private TileGraphics canvas;
-	public StackPane hitBoxes,interactables,textBoxes,itemBoxes,equippedWeapon,inanimateEntities,characters,backCharacters;
+	public StackPane hitBoxes,interactables,textBoxes,itemBoxes,equippedWeapon,inanimateEntities,characters,backCharacters,HUD;
 	public boolean showHitBoxes,gameOver;
 	public static double scaleX,scaleY;
 	private ArrayList<Sprite> sprites,removeSprites,addSprites;
@@ -122,6 +123,20 @@ public class Game extends StackPane{
 		textBoxes.getChildren().remove(t);
 	}
 	
+	public void addHealthBar(HealthBar b) {
+		if(!textBoxes.getChildren().contains(b))
+			textBoxes.getChildren().add(b);
+		else
+			System.out.println("Health Bar Error:Add");
+	}
+	
+	public void removeHealthBar(HealthBar b) {
+		if(textBoxes.getChildren().contains(b))
+			textBoxes.getChildren().remove(b);
+		else
+			System.out.println("Health Bar Error:Remove");
+	}
+	
 	public void removeSprite(Sprite s) {
 		if(sprites.contains(s)) {
 			removeSprites.add(s);
@@ -177,6 +192,9 @@ public class Game extends StackPane{
 		textBoxes = new StackPane();
 		textBoxes.setPrefWidth(width);
 		textBoxes.setPrefHeight(height);
+		textBoxes.setStyle("-fx-alignment: center;");
+		
+		this.setStyle("-fx-alignment: center;");
 		
 		characters = new StackPane();
 		characters.setPrefWidth(width);
@@ -198,17 +216,22 @@ public class Game extends StackPane{
 		backCharacters.setPrefWidth(width);
 		backCharacters.setPrefHeight(height);
 		
+		HUD = new StackPane();
+		HUD.setPrefWidth(width);
+		HUD.setPrefHeight(height);
+		
 		this.getChildren().add(canvas);
 		this.getChildren().add(hitBoxes);
 		this.getChildren().add(itemBoxes);
 		this.getChildren().add(interactables);
 		this.getChildren().add(backCharacters);
 		this.getChildren().add(inanimateEntities);
-		this.getChildren().add(textBoxes);
+		
 		
 		this.getChildren().add(characters);
 		this.getChildren().add(equippedWeapon);
-		
+		this.getChildren().add(textBoxes);
+		this.getChildren().add(HUD);
 
 		canvas.initRoom();
 		removeSprites = new ArrayList<Sprite>();

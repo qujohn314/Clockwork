@@ -16,14 +16,12 @@ public class RazorEye extends Enemy{
 	private boolean suicide;
 	
 	public RazorEye(int xcord, int ycord) {
-		super(xcord, ycord);
+		super(xcord, ycord,2,2);
 		lootTable = new LootTable(new LootElement(4,Item.Misc.opticCable(),1),new LootElement(10,new Gear(Gear.Type.BRONZE),1));
 		behavior = Behavior.PURSUE;
 		speed = 1 + Math.random() * 0.6;
 		scale = 1;
 		damage = 1;
-		health = 2;
-		maxHealth = 2;
 		setHitBox();
 		setBaseSpriteSheet("RazorEye.png",scale);
 		generateFrameViewports(width*scale,3);
@@ -73,6 +71,7 @@ public class RazorEye extends Enemy{
 
 	@Override
 	public void onDeath() {
+		game.removeHealthBar(healthBar);
 		game.removeSprite(this);
 		if(!suicide)
 			lootItems();
