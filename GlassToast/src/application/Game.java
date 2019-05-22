@@ -218,7 +218,10 @@ public class Game extends StackPane{
 		backCharacters.setPrefWidth(width);
 		backCharacters.setPrefHeight(height);
 		
-		HUD = new PlayerHUD();
+		Item.initFrameViewports(32,1,10,10,10);
+		player = new Player(0,0);
+		
+		HUD = new PlayerHUD(player);
 		HUD.setPrefWidth(width);
 		HUD.setPrefHeight(height);
 		
@@ -228,11 +231,11 @@ public class Game extends StackPane{
 		this.getChildren().add(interactables);
 		this.getChildren().add(backCharacters);
 		this.getChildren().add(inanimateEntities);
-		
+		this.getChildren().add(textBoxes);
 		
 		this.getChildren().add(characters);
 		this.getChildren().add(equippedWeapon);
-		this.getChildren().add(textBoxes);
+		
 		this.getChildren().add(HUD);
 
 		canvas.initRoom();
@@ -262,8 +265,7 @@ public class Game extends StackPane{
 			    }
 			});
 	
-			Item.initFrameViewports(32,1,10,10,10);
-			player = new Player(0,0);
+			
 			
 			new Chest(-30,20);
 			new Chest(50,20);
@@ -271,11 +273,11 @@ public class Game extends StackPane{
 			new Chest(200,20);
 			new Chest(-200,20);
 			new Chest(-130,20);	
-			/*
+			
 			new EyeFactory(-150,-100);
 			new EyeFactory(150,-100);
 			new EyeFactory(-150,100);
-			new EyeFactory(150,100);*/
+			new EyeFactory(150,100);
 			
 			
 			renderer = new AnimationTimer() {
