@@ -15,11 +15,17 @@ import application.items.weapons.Weapon;
 import application.sprites.Chest;
 import application.sprites.InfoText;
 import application.sprites.Sprite;
+import application.sprites.entities.enemies.RazorEye;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public class Player extends Entity implements Serializable{
 
@@ -33,12 +39,12 @@ public class Player extends Entity implements Serializable{
 	private Weapon weapon;
 	private boolean canAttack, idle;
 	private int stepCount;
-	private int batteryPower;
-	private int batteryPowerMax;
-	private boolean canInteract;
+	public double batteryPower,batteryPowerMax,batteryRateOut;
+	private boolean canInteract,batteryStart;
 	public int gears;
 	public boolean dead;
 	public int health;
+	private Timeline updateBattery;
 	
 	
 	public Player(int xcord,int ycord) {
@@ -65,7 +71,8 @@ public class Player extends Entity implements Serializable{
 		weapon.equip();
 		batteryPower = 100;
 		batteryPowerMax = 100;
-		
+		batteryRateOut = 0.35;
+		updateBattery = new Timeline();
 		setHitBox();
 		
 		setBaseSpriteSheet("Player.png",scale);
@@ -139,7 +146,18 @@ public class Player extends Entity implements Serializable{
 		Game.getGame().addEventFilter(javafx.scene.input.MouseEvent.MOUSE_RELEASED, event ->{
 			canAttack = true;
 		});
+		
+		updateBattery.getKeyFrames().add(new KeyFrame(Duration.seconds(batteryRateOut), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				if(batteryPower - 0.1 > 0)
+					batteryPower -= 0.1;
+			}
+			
+		}));
 		game.addSprite(this);
+		
+		
 	}
 	
 	public int frameRate() {
@@ -397,13 +415,19 @@ public class Player extends Entity implements Serializable{
 		}
 		}
 	//	System.out.println("X:"+x + " Y:" + y);
-		
+		if(!batteryStart) {
+			batteryStart = true;
+			updateBattery.setCycleCount(Timeline.INDEFINITE);
+			updateBattery.play();
+
+		}
 	}
 	
 	@Override
 	protected void setHitBox() {
 		hitBox = new Rectangle(x,y,width,height);
 		hitBox.setFill(Color.RED);
+		hitBox.setVisible(false);
 
 	}
 
@@ -413,8 +437,10 @@ public class Player extends Entity implements Serializable{
 	}
 	
 	public void loseHealth(double amt) {
-		health -= amt;
-		System.out.println(health +"/"+maxHealth);
+		if(health - amt > 0) {
+			health -= amt;
+		}else
+			health = 0;
 	}
 
 	public boolean isMoving() {

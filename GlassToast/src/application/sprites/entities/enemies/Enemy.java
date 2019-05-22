@@ -63,6 +63,7 @@ public abstract class Enemy extends Entity{
 	@Override
 	public void render() {
 		
+		
 		if(health <= 0) {
 			dead = true;
 			onDeath();

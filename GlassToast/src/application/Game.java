@@ -44,7 +44,8 @@ public class Game extends StackPane{
 	private static final float timeStep = 0.0125f;
 	private float accumulatedTime = 0,previousTime = 0;
 	private static boolean newGameMade = false;
-	private boolean removeRequest = false,initRun = true;
+	private boolean removeRequest = false;
+	public boolean initRun = true;
 	
 	public void render() {	
 		ArrayList<Sprite> currentSprites = new ArrayList<Sprite>();
@@ -274,8 +275,8 @@ public class Game extends StackPane{
 			new Chest(-200,20);
 			new Chest(-130,20);	
 			
-			new EyeFactory(-150,-100);
-			new EyeFactory(150,-100);
+			//new EyeFactory(-150,-100);
+			//new EyeFactory(150,-100);
 			new EyeFactory(-150,100);
 			new EyeFactory(150,100);
 			
@@ -313,8 +314,12 @@ public class Game extends StackPane{
 					}
 					HUD.render();
 					
-						if(initRun)
+						if(initRun) {
 							initRun = false;
+							for(Sprite s:currentSprites) {
+								s.getImg().setVisible(true);
+							}
+						}
 					}
 
 			};

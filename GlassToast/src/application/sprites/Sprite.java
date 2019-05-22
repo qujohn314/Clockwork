@@ -42,7 +42,8 @@ public abstract class Sprite {
 		game = Game.getGame();
 		img = new ImageView();
 		img.setPreserveRatio(true);
-
+		if(Game.getGame().initRun)
+			img.setVisible(false);
 		
 	}	
 	

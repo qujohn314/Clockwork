@@ -42,6 +42,7 @@ public abstract class Entity extends Sprite{
 	protected void setHitBox() {
 		hitBox = new Rectangle(x,y,width,height);
 		hitBox.setFill(Color.RED);
+		hitBox.setVisible(false);
 	}
 	
 	public abstract void onDeath();

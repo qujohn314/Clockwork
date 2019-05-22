@@ -67,6 +67,7 @@ public class Chest extends Sprite implements Interactable, Comparable<Interactab
 	protected void setHitBox() {
 		hitBox = new Rectangle(x,y,width,height);
 		hitBox.setFill(Color.RED);
+		hitBox.setVisible(false);
 	}
 	
 	
