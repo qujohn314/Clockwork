@@ -35,7 +35,8 @@ public class Game extends StackPane{
 	protected double height;
 	private HashSet<String> keyInput;
 	private TileGraphics canvas;
-	public StackPane hitBoxes,interactables,textBoxes,itemBoxes,equippedWeapon,inanimateEntities,characters,backCharacters,HUD;
+	public StackPane hitBoxes,interactables,textBoxes,itemBoxes,equippedWeapon,inanimateEntities,characters,backCharacters;
+	public PlayerHUD HUD;
 	public boolean showHitBoxes,gameOver;
 	public static double scaleX,scaleY;
 	private ArrayList<Sprite> sprites,removeSprites,addSprites;
@@ -43,7 +44,7 @@ public class Game extends StackPane{
 	private static final float timeStep = 0.0125f;
 	private float accumulatedTime = 0,previousTime = 0;
 	private static boolean newGameMade = false;
-	private boolean removeRequest = false,addRequest = false,initRun = true;
+	private boolean removeRequest = false,initRun = true;
 	
 	public void render() {	
 		ArrayList<Sprite> currentSprites = new ArrayList<Sprite>();
@@ -89,6 +90,7 @@ public class Game extends StackPane{
 	public void rescale() {
 		for(Sprite s:sprites)
 			s.rescale();
+		HUD.rescale();
 	}
 	
 	public void addSprite(Sprite s) {
@@ -216,7 +218,7 @@ public class Game extends StackPane{
 		backCharacters.setPrefWidth(width);
 		backCharacters.setPrefHeight(height);
 		
-		HUD = new StackPane();
+		HUD = new PlayerHUD();
 		HUD.setPrefWidth(width);
 		HUD.setPrefHeight(height);
 		
@@ -269,10 +271,11 @@ public class Game extends StackPane{
 			new Chest(200,20);
 			new Chest(-200,20);
 			new Chest(-130,20);	
+			/*
 			new EyeFactory(-150,-100);
 			new EyeFactory(150,-100);
 			new EyeFactory(-150,100);
-			new EyeFactory(150,100);
+			new EyeFactory(150,100);*/
 			
 			
 			renderer = new AnimationTimer() {
@@ -306,6 +309,7 @@ public class Game extends StackPane{
 						s.renderHitBox(showHitBoxes);
 						}
 					}
+					HUD.render();
 					
 						if(initRun)
 							initRun = false;
