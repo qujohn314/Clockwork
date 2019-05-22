@@ -88,7 +88,7 @@ public class PlayerHUD extends StackPane{
 			change.getKeyFrames().add(new KeyFrame(Duration.seconds(0.001), new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					if(diffCount < barDifference) {
+					if(diffCount < barDifference && img.getFitHeight()>0.1) {
 						double previousHeight = img.getFitHeight();
 						
 						
@@ -132,9 +132,7 @@ public class PlayerHUD extends StackPane{
 				percent = player.batteryPower/(double)player.batteryPowerMax;
 				if(percent == 0)
 					percent = 0.0001;
-				img.setFitHeight(120*Game.scaleY*percent);
-				double newHeight = img.getFitHeight();
-				diffHeight = newHeight-previousHeight;
+				decreaseBar(previousHeight-(120*Game.scaleY*percent));
 			}
 		}
 		

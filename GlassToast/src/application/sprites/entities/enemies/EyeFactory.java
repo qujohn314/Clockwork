@@ -24,7 +24,7 @@ public class EyeFactory extends Enemy{
 	private int spawnCount;
 	private boolean closed;
 	
-	public EyeFactory(int xcord, int ycord) {
+	public EyeFactory(int xcord, int ycord,boolean infinite) {
 		super(xcord, ycord,20,20);
 		lootTable = new LootTable(new LootElement(70,new Gear(Gear.Type.STEEL),1));
 		behavior = Behavior.STATIONARY;
@@ -50,7 +50,10 @@ public class EyeFactory extends Enemy{
 			
 		}));
 		
-		spawnTimer.setCycleCount(spawnCount);
+		if(!infinite)
+			spawnTimer.setCycleCount(spawnCount);
+		else
+			spawnTimer.setCycleCount(Timeline.INDEFINITE);
 		spawnTimer.play();
 		spawnTimer.setOnFinished(new EventHandler<ActionEvent>() {
 			@Override

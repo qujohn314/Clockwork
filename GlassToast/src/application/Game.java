@@ -275,10 +275,13 @@ public class Game extends StackPane{
 			new Chest(-200,20);
 			new Chest(-130,20);	
 			
-			//new EyeFactory(-150,-100);
-			//new EyeFactory(150,-100);
-			new EyeFactory(-150,100);
-			new EyeFactory(150,100);
+			
+			new EyeFactory(-150,-100,true);
+			new EyeFactory(150,-100,true);
+			new EyeFactory(-150,100,true);
+			new EyeFactory(150,100,true);
+		
+		
 			
 			
 			renderer = new AnimationTimer() {
