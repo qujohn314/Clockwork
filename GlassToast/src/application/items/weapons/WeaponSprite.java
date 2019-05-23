@@ -102,8 +102,8 @@ public class WeaponSprite extends Sprite{
 	
 	protected void attack() {
 		if(!attacking) {
-			
-		
+			if(entity instanceof Player)
+				((Player)entity).batteryPower-=weapon.energyUsage;
 			attackAnimation.setCycleCount(Timeline.INDEFINITE);
 			attackAnimation.play();
 		}

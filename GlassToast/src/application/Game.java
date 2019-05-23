@@ -254,14 +254,14 @@ public class Game extends StackPane{
 		scene.widthProperty().addListener(new ChangeListener<Number>() {
 			   @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
 				   width = (Double)newSceneWidth;
-				   scaleX = (width / 1200) * 2;
+				   scaleX = (width / 1200) * 1.9;
 				   rescale();
 			    }
 			});
 			scene.heightProperty().addListener(new ChangeListener<Number>() {
 			   @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
 				   height = (Double)newSceneHeight;
-				   scaleY = (height / 675) * 2;
+				   scaleY = (height / 675) * 1.9;
 				   rescale();
 			    }
 			});
@@ -276,10 +276,11 @@ public class Game extends StackPane{
 			new Chest(-130,20);	
 			
 			
-			new EyeFactory(-150,-100,true);
-			new EyeFactory(150,-100,true);
-			new EyeFactory(-150,100,true);
-			new EyeFactory(150,100,true);
+			new EyeFactory(-150,-100,false);
+			new EyeFactory(150,-100,false);
+			new EyeFactory(-150,100,false);
+			
+			new EyeFactory(150,100,false);
 		
 		
 			

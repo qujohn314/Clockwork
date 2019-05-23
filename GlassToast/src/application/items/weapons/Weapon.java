@@ -18,8 +18,9 @@ public class Weapon extends Item{
 	private WeaponType weaponType;
 	private String picPath;
 	private int spriteRow,spriteCol;
+	protected double energyUsage;
 	
-	public Weapon(Entity e,int p, String n, String d,double dmg,WeaponType t,String pic,int fspriteRow,int fspriteCol) {
+	public Weapon(Entity e,int p, String n, String d,double dmg,WeaponType t,String pic,int fspriteRow,int fspriteCol,double eu) {
 		super(p, n, d,fspriteRow,fspriteCol);
 		entity = e;
 		weaponSprite = new WeaponSprite(pic,t,e,this);
@@ -28,6 +29,7 @@ public class Weapon extends Item{
 		spriteRow = fspriteRow;
 		spriteCol = fspriteCol;
 		damage = dmg;
+		energyUsage = eu;
 	}
 
 	
@@ -37,7 +39,7 @@ public class Weapon extends Item{
 	
 	public static class Melee{
 		public static Weapon ghostIron(Entity e) {
-			return new Weapon(e,70,"Ghost Iron Blade","A short sword made from a rare metal.",3.5,WeaponType.SWORD,"GhostSteelSword.png",0,1);
+			return new Weapon(e,70,"Ghost Iron Blade","A short sword made from a rare metal.",3.5,WeaponType.SWORD,"GhostSteelSword.png",0,1,0.35);
 		}
 		
 		
@@ -53,8 +55,8 @@ public class Weapon extends Item{
 	}
 
 	@Override
-	public Item createNewItemObject() {
-		return new Weapon(entity,price,name,desc,damage,weaponType,picPath,spriteRow,spriteCol);
+	public Weapon createNewItemObject() {
+		return new Weapon(entity,price,name,desc,damage,weaponType,picPath,spriteRow,spriteCol,energyUsage);
 	}
 	
 	

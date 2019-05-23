@@ -12,14 +12,14 @@ public class Sealant extends Consumable{
 	
 	public Sealant() {
 		super(120, "Sealant", "Apply liberally to cracks and scrapes.\nRestores 1 HP", e -> {
-			e.health = e.health + 1 > e.maxHealth ? e.health : e.health + 1;
-		},SPRITESHEET_ROW,SPRITESHEET_COL);
+			e.health = e.health + 1 > e.maxHealth ? e.maxHealth : e.health + 1;
+		System.out.println(e.health);},SPRITESHEET_ROW,SPRITESHEET_COL);
 		
 		
 	}
 
 	@Override
-	public Consumable createThisItem() {
+	public Consumable createNewItemObject() {
 		return new Sealant();
 	}
 	

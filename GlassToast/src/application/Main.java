@@ -27,8 +27,8 @@ public class Main extends Application {
 
 			primaryStage.setMaximized(true);
 			Game.getGame().init(scene);
-			Game.scaleX = (Game.getGame().width / 1200) * 2;
-			Game.scaleY = (Game.getGame().height / 675) * 2;
+			Game.scaleX = (Game.getGame().width / 1200) * 1.9;
+			Game.scaleY = (Game.getGame().height / 675) * 1.9;
 			Game.getGame().rescale();
 			//
 		} catch(Exception e) {

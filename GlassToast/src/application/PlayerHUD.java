@@ -17,21 +17,22 @@ public class PlayerHUD extends StackPane{
 	private Player player;
 	private Rectangle barCell1,barCell2;
 	
+	
 	public PlayerHUD(Player p){
-		energy = new PlayerBars(-280,80,"energy");
-		health = new PlayerBars(-260,80,"health");
+		energy = new PlayerBars(-300,100,"energy");
+		health = new PlayerBars(-280,100,"health");
 		
 		player = p;
 		
 		barCell1 = new Rectangle();
 		barCell1.setFill(Color.DIMGREY);
 		barCell1.setStroke(Color.BLACK);
-		barCell1.setStrokeWidth(2.5);
+		barCell1.setStrokeWidth(3);
 		
 		barCell2 = new Rectangle();
 		barCell2.setFill(Color.DIMGREY);
 		barCell2.setStroke(Color.BLACK);
-		barCell2.setStrokeWidth(2.5);
+		barCell2.setStrokeWidth(3);
 		
 		this.getChildren().add(barCell1);
 		this.getChildren().add(barCell2);
@@ -43,11 +44,11 @@ public class PlayerHUD extends StackPane{
 		energy.rescale();
 		health.rescale();
 		
-		barCell1.setWidth(14*Game.scaleX);
-		barCell2.setWidth(14*Game.scaleX);
+		barCell1.setWidth(16.5*Game.scaleX);
+		barCell2.setWidth(16.5*Game.scaleX);
 		
-		barCell1.setHeight(energy.origHeight*Game.scaleY+2);
-		barCell2.setHeight(health.origHeight*Game.scaleY+2);
+		barCell1.setHeight(energy.origHeight*Game.scaleY+1);
+		barCell2.setHeight(health.origHeight*Game.scaleY+1);
 
 	}
 	
@@ -55,11 +56,11 @@ public class PlayerHUD extends StackPane{
 		energy.render();
 		health.render();
 		
-		barCell1.setTranslateY(-80*Game.scaleY);
-		barCell2.setTranslateY(-80*Game.scaleY);
+		barCell1.setTranslateY(-100*Game.scaleY);
+		barCell2.setTranslateY(-100*Game.scaleY);
 		
-		barCell1.setTranslateX(-280*Game.scaleX);
-		barCell2.setTranslateX(-260*Game.scaleX);
+		barCell1.setTranslateX(-300*Game.scaleX);
+		barCell2.setTranslateX(-280*Game.scaleX);
 		
 	
 	}
@@ -70,6 +71,7 @@ public class PlayerHUD extends StackPane{
 		private double percent,diffHeight,barDifference,diffCount,animateHeightDiff;
 		double origHeight;
 		Timeline change;
+		private boolean changing,firstRender = true,increasing;
 
 		public PlayerBars(double xcord, double ycord,String t) {
 			super(xcord, ycord);
@@ -82,13 +84,14 @@ public class PlayerHUD extends StackPane{
 			setBaseSpriteSheet("PlayerBars.png",scale);
 			generateFramesFromType(type);
 			autoAnimate(0.1);
-			origHeight = 120;
+			origHeight = 130;
 			change = new Timeline();
 			
 			change.getKeyFrames().add(new KeyFrame(Duration.seconds(0.001), new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					if(diffCount < barDifference && img.getFitHeight()>0.1) {
+					changing = true;
+					if(diffCount < barDifference && img.getFitHeight()>0.1 && !increasing) {
 						double previousHeight = img.getFitHeight();
 						
 						
@@ -101,10 +104,24 @@ public class PlayerHUD extends StackPane{
 						img.setTranslateX(x * Game.scaleX);
 						img.setTranslateY((y * Game.scaleY)-(animateHeightDiff/2));
 						y = img.getTranslateY()/Game.scaleY;
-					}
-					else {
+					}else if(diffCount < Math.abs(barDifference) && img.getFitHeight()<130*Game.scaleY-0.1 && increasing){
+						double previousHeight = img.getFitHeight();
+						
+						img.setFitHeight(img.getFitHeight()+0.1);
+						
+						double newHeight = img.getFitHeight();
+						animateHeightDiff = newHeight-previousHeight;
+						diffCount+=0.1;
+						
+						img.setTranslateX(x * Game.scaleX);
+						img.setTranslateY((y * Game.scaleY)-(animateHeightDiff/2));
+						y = img.getTranslateY()/Game.scaleY;
+					}else {
+					
 						change.stop();
 						diffCount = 0;
+						changing = false;
+						increasing = false;
 					}
 				}
 				
@@ -124,38 +141,47 @@ public class PlayerHUD extends StackPane{
 			if(!type.equals("energy")) {
 				double previousHeight = img.getFitHeight();
 				percent = player.health/(double)player.maxHealth;
-				if(percent == 0)
-					percent = 0.0001;
-				decreaseBar(previousHeight-(120*Game.scaleY*percent));
+				decreaseBar(previousHeight-(130*Game.scaleY*percent));
 			}else {
 				double previousHeight = img.getFitHeight();
 				percent = player.batteryPower/(double)player.batteryPowerMax;
-				if(percent == 0)
-					percent = 0.0001;
-				decreaseBar(previousHeight-(120*Game.scaleY*percent));
+				decreaseBar(previousHeight-(130*Game.scaleY*percent));
+				
 			}
 		}
 		
 		@Override
 		public void rescale() {
+			
 			setBaseSpriteSheet("PlayerBars.png",scale);
 			generateFramesFromType(type);
 			
-			img.setFitHeight(120*Game.scaleY*percent);
-			img.setFitWidth(30*Game.scaleX);
+			img.setFitHeight(130*Game.scaleY*percent);
+			img.setFitWidth(35*Game.scaleX);
 		} 
 		
 		public void render() {
-			update();
-			img.setTranslateX(x * Game.scaleX);
-			img.setTranslateY((y * Game.scaleY)-(diffHeight/2));
-			y = img.getTranslateY()/Game.scaleY;
+			
+				img.setTranslateX(x * Game.scaleX);
+				img.setTranslateY((y * Game.scaleY)-(diffHeight/2));
+				y = img.getTranslateY()/Game.scaleY;
+				firstRender = false;
+			
+			if(!changing)
+				update();
+			
 			if(!img.isVisible())
 					img.setVisible(true);
+			
+			
 
 		}
 
 		public void decreaseBar(double diff) {
+			if(diff < -1) {
+				increasing = true;
+			}
+			
 			barDifference = diff;
 			change.setCycleCount(Timeline.INDEFINITE);
 			change.play();

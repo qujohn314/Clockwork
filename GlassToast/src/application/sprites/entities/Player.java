@@ -11,6 +11,7 @@ import application.Game;
 import application.Interactable;
 import application.items.Gear;
 import application.items.Item;
+import application.items.consumables.Consumable;
 import application.items.weapons.Weapon;
 import application.sprites.Chest;
 import application.sprites.InfoText;
@@ -71,7 +72,7 @@ public class Player extends Entity implements Serializable{
 		weapon.equip();
 		batteryPower = 100;
 		batteryPowerMax = 100;
-		batteryRateOut = 0.35;
+		batteryRateOut = 0.26;
 		updateBattery = new Timeline();
 		setHitBox();
 		
@@ -191,9 +192,13 @@ public class Player extends Entity implements Serializable{
 	
 	public boolean addToInventory(Item item) {
 		boolean added = false;
-		
+	
 		if(item instanceof Gear){
 			gears += item.getSellPrice();
+			return true;
+		}
+		if(item instanceof Consumable){
+			((Consumable) item).use(this);
 			return true;
 		}
 			for(int slot = 0;slot<inventory.length;slot++) {

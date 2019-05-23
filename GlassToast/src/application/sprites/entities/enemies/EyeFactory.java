@@ -25,14 +25,14 @@ public class EyeFactory extends Enemy{
 	private boolean closed;
 	
 	public EyeFactory(int xcord, int ycord,boolean infinite) {
-		super(xcord, ycord,20,20);
+		super(xcord, ycord,24,24);
 		lootTable = new LootTable(new LootElement(70,new Gear(Gear.Type.STEEL),1));
 		behavior = Behavior.STATIONARY;
 		speed = 1;
 		scale = 2;
 		damage = 1;
 		spawnRate = (Math.random() * 3.5) + 1.5;
-		spawnCount = ((int)Math.random()*15) + 10;
+		spawnCount = ((int)Math.random()*23) + 18;
 		
 		setHitBox();
 		setBaseSpriteSheet("RazorEye.png",scale);
