@@ -39,7 +39,7 @@ public class Weapon extends Item{
 	
 	public static class Melee{
 		public static Weapon ghostIron(Entity e) {
-			return new Weapon(e,70,"Ghost Iron Blade","A short sword made from a rare metal.",3.5,WeaponType.SWORD,"GhostSteelSword.png",0,1,0.35);
+			return new Weapon(e,70,"Ghost Iron Blade","A short sword made from a rare metal.",3.5,WeaponType.SWORD,"GhostSteelSword.png",0,1,0.5);
 		}
 		
 		

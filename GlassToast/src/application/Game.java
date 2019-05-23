@@ -274,8 +274,6 @@ public class Game extends StackPane{
 			new Chest(200,20);
 			new Chest(-200,20);
 			new Chest(-130,20);	
-			
-			
 			new EyeFactory(-150,-100,false);
 			new EyeFactory(150,-100,false);
 			new EyeFactory(-150,100,false);

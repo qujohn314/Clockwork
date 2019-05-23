@@ -244,9 +244,10 @@ public class Player extends Entity implements Serializable{
 	
 	@Override
 	public void render() {
-		if(health <= 0 && !dead){
+		if((health <= 0 || batteryPower <= 0.1)&& !dead){
 			onDeath();
 			dead = true;
+			
 		}else if(!dead){
 		
 		double newSpeedY = speed;
@@ -442,10 +443,11 @@ public class Player extends Entity implements Serializable{
 	}
 	
 	public void loseHealth(double amt) {
-		if(health - amt > 0) {
-			health -= amt;
-		}else
-			health = 0;
+		if(!Game.getGame().gameOver)
+			if(health - amt > 0) 
+				health -= amt;
+			else
+				health = 0;
 	}
 
 	public boolean isMoving() {
@@ -456,7 +458,13 @@ public class Player extends Entity implements Serializable{
 	@Override
 	public void onDeath() {
 		stopAutoAnimate();
-		setAnimationCycle(5);
+		if(health <= 0)
+			setAnimationCycle(5);
+		else
+			setAnimationCycle(4);
+		
+		
+		
 		Game.getGame().removeSprite(weapon.weaponSprite);
 		Game.getGame().gameOver = true;
 	}
