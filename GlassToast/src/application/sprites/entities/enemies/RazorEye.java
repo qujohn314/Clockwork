@@ -55,7 +55,7 @@ public class RazorEye extends Enemy{
 	@Override
 	public void onCollide(Sprite s) {
 		if(s instanceof Player) {
-			((Player)s).loseHealth(damage);
+			((Player)s).loseHealth(damage); 
 			suicide = true;
 			onDeath();
 			

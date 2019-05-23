@@ -87,7 +87,7 @@ public class PlayerHUD extends StackPane{
 			origHeight = 130;
 			change = new Timeline();
 			
-			change.getKeyFrames().add(new KeyFrame(Duration.seconds(0.001), new EventHandler<ActionEvent>() {
+			change.getKeyFrames().add(new KeyFrame(Duration.seconds(0.0012), new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
 					changing = true;
