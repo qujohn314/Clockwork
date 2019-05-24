@@ -33,7 +33,6 @@ public class Player extends Entity implements Serializable{
 	private static final long serialVersionUID = -7625029116892596346L;
 	
 	public int level;
-	public int maxHealth;
 	public int silver;
 	private PriorityQueue<Interactable> interactRequests;
 	private Item[] inventory;
@@ -44,7 +43,6 @@ public class Player extends Entity implements Serializable{
 	private boolean canInteract,batteryStart;
 	public int gears;
 	public boolean dead;
-	public int health;
 	private Timeline updateBattery;
 	
 	
@@ -441,14 +439,7 @@ public class Player extends Entity implements Serializable{
 	public void onCollide(Sprite s) {
 		
 	}
-	
-	public void loseHealth(double amt) {
-		if(!Game.getGame().gameOver)
-			if(health - amt > 0) 
-				health -= amt;
-			else
-				health = 0;
-	}
+
 
 	public boolean isMoving() {
 		return ((game.getKeyInputs().contains("W") || game.getKeyInputs().contains("A") || game.getKeyInputs().contains("S")

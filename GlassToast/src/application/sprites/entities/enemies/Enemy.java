@@ -16,7 +16,6 @@ public abstract class Enemy extends Entity{
 	protected double damage;
 	protected Behavior behavior;
 	protected boolean dead;
-	public double health,maxHealth;
 	public ArrayList<Sprite> damageSource;
 	protected HealthBar healthBar;
 	
@@ -32,9 +31,6 @@ public abstract class Enemy extends Entity{
 		Game.getGame().addHealthBar(healthBar);
 	}
 
-	public void loseHealth(double amt) {
-		health -= amt;
-	}
 	
 	public abstract ArrayList<Item> getDrops();
 

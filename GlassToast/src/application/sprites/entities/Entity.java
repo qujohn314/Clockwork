@@ -11,12 +11,15 @@ import javafx.scene.shape.Rectangle;
 
 public abstract class Entity extends Sprite{
 	
+	
+	
+	
 	protected double handX;
 	protected double handY;
 	public int direction;
 	public ArrayList<InfoText> infoTexts;
 	public ArrayList<InfoText> deleteInfoTexts;
-	public double speed;
+	public double speed,health,maxHealth;
 
 	
 	public Entity(int xcord, int ycord,double hX, double hY) {
@@ -35,7 +38,13 @@ public abstract class Entity extends Sprite{
 		return handY;
 	}
 	
-	
+	public void loseHealth(double amt) {
+		if(!Game.getGame().gameOver)
+			if(health - amt > 0) 
+				health -= amt;
+			else
+				health = 0;
+	}
 	
 	
 	@Override
@@ -49,8 +58,6 @@ public abstract class Entity extends Sprite{
 	
 	@Override
 	public void render() {	
-		
-		
 		img.setTranslateX(x);
 		img.setTranslateY(y);
 	}
